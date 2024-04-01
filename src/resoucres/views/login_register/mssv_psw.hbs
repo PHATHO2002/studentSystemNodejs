@@ -1,0 +1,24 @@
+<html lang='en'>
+    <head>
+        <meta charset='UTF-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <title>Document</title>
+    </head>
+    <body>
+
+        {{#if userData.errCode}}
+            <div class='alert alert-success' role='alert'>
+                <h4 class='alert-heading'>{{userData.message}}</h4>
+
+            </div>
+
+        {{else}}
+            <div class='alert alert-success' role='alert'>
+                <h4 class='alert-heading'>{{userData.message}}</h4>
+                <p>Mã số sinh viên của bạn là :{{userData.data.mssv}} </p>
+                <hr />
+                <p>Mật khẩu : {{userData.data.psw}}</p>
+            </div>
+        {{/if}}
+    </body>
+</html>
