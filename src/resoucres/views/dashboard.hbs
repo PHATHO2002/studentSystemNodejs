@@ -1,0 +1,366 @@
+<div class='content'>
+    {{#if userData.isStudent}}
+        <div class='row'>
+            <div class='col'>
+                <div class='box-df profile-user'>
+
+                    <div class='profile-title'>
+                        <div class='caption'>
+                            <span class='caption-subject bold' lang='db-thongtinsinhvien'>Thông tin sinh viên</span>
+                        </div>
+
+                    </div>
+                    <div class='profile-body'>
+
+                        <div class='row'>
+                            <div class='col-sm-3'>
+                                <div class='profile-userpic'>
+                                    <img
+                                        src='{{{userData.avatar}}}'
+                                        class='img-responsive'
+                                        style='object-fit: cover;'
+                                    />
+
+                                </div>
+                                <div class='text-center'>
+                                    <a
+                                        href='/thong-tin-sinh-vien.html'
+                                        class='color-active'
+                                        lang='db-chitiet-button'
+                                    >Xem chi tiết</a>
+                                </div>
+                            </div>
+                            <div class='col-sm-9'>
+                                <div class='profile-userdoc'>
+                                    <ul>
+                                        <li>MSSV: <span>{{{userData.svId}}}</span></li>
+                                        <li>Họ tên:<span>{{{userData.FirstName}}} {{{userData.LastName}}}</span> </li>
+                                        <li>Gới tính: <span></span></li>
+                                        <li>Ngày sinh: <span>{{{userData.birtday}}}</span></li>
+                                        <li>Nơi sinh:<span>{{{userData.adress}}}</span> </li>
+                                    </ul>
+                                    <ul>
+                                        <li>Lớp học:<span>{{{userData.classCode}}}</span></li>
+                                        <li>Khóa học:<span>{{{userData.makhoa}}}</span></li>
+                                        <li>Bậc đào tạo:<span></span></li>
+                                        <li>Chức vụ :<span></span></li>
+                                        <li>Nghành:<span>{{{userData.majorCode}}}</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class='col'>
+                <div class='row'>
+                    <div class='study-schedule'>
+                        <div class='col'>
+                            <div class='box-df study-schedule-week'>
+                                <a href=''>
+                                    <h3 class='name'>Lịch học trong tuần</h3>
+                                    <div class='desc clearfix'>
+                                        <div class='number'>6</div>
+
+                                    </div>
+                                    <div class='text-left'>
+                                        Xem chi tiết
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class='col'>
+                            <div class='box-df exam-schedule-week'>
+                                <a href=''>
+                                    <h3 class='name'>Lịch thi trong tuần</h3>
+                                    <div class='desc clearfix'>
+                                        <div class='number'>6</div>
+
+                                    </div>
+                                    <div class='text-left'>
+                                        Xem chi tiết
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class='row'>
+            <div class='featured'>
+                <div class='row'>
+
+                    <div class='col'>
+
+                        <a href='test'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-briefcase' aria-hidden='true'></i>
+                                </div>
+                                <span>Danh sách lớp</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='#'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-bar-chart' aria-hidden='true'></i>
+                                </div>
+                                <span>Kết quả học tập</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='#'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-calendar' aria-hidden='true'></i>
+                                </div>
+                                <span>Lịch theo tuần</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='#'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-newspaper-o' aria-hidden='true'></i>
+                                </div>
+                                <span>Lịch theo tiến độ</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='#'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+
+                                    <i class='fa fa-calendar-check-o' aria-hidden='true'></i>
+                                </div>
+                                <span>Lịch toàn trường</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='student/getListLhp-open'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-plus-square-o' aria-hidden='true'></i>
+                                </div>
+                                <span>Đăng ký học phần</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='#'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-usd' aria-hidden='true'></i>
+                                </div>
+                                <span>Tra cứu công nợ</span>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'></div>
+    {{else}}
+        <div class='row'>
+            <div class='col'>
+                <div class='box-df profile-user'>
+
+                    <div class='profile-title'>
+                        <div class='caption'>
+                            <span class='caption-subject bold' lang='db-thongtinsinhvien'>Thông tin giáo viên</span>
+                        </div>
+
+                    </div>
+                    <div class='profile-body'>
+
+                        <div class='row'>
+                            <div class='col-sm-3'>
+                                <div class='profile-userpic'>
+                                    <img src='images/avatar1.jpg' class='img-responsive' style='object-fit: cover;' />
+
+                                </div>
+                                <div class='text-center'>
+                                    <a
+                                        href='/thong-tin-sinh-vien.html'
+                                        class='color-active'
+                                        lang='db-chitiet-button'
+                                    >Xem chi tiết</a>
+                                </div>
+                            </div>
+                            <div class='col-sm-9'>
+                                <div class='profile-userdoc'>
+                                    <ul>
+                                        <li>MSGV: <span>{{{userData.teacherId}}}</span></li>
+                                        <li>Họ tên:<span>{{{userData.FirstName}}} {{{userData.LastName}}}</span> </li>
+                                        <li>Gới tính: <span></span></li>
+                                        <li>Ngày sinh: <span>{{{userData.birtday}}}</span></li>
+                                        <li>Nơi sinh:<span>{{{userData.adress}}}</span> </li>
+                                    </ul>
+                                    <ul>
+
+                                        <li>Chức vụ :<span>Giáo Viên</span></li>
+                                        <li>Nghành:<span>{{{userData.majorCode}}}</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class='col'>
+                <div class='row'>
+                    <div class='study-schedule'>
+                        <div class='col'>
+                            <div class='box-df study-schedule-week'>
+                                <a href=''>
+                                    <h3 class='name'>Lịch dạy trong tuần</h3>
+                                    <div class='desc clearfix'>
+                                        <div class='number'>6</div>
+
+                                    </div>
+                                    <div class='text-left'>
+                                        Xem chi tiết
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class='col'>
+                            <div class='box-df exam-schedule-week'>
+                                <a href=''>
+                                    <h3 class='name'>Lịch coi thi trong tuần</h3>
+                                    <div class='desc clearfix'>
+                                        <div class='number'>6</div>
+
+                                    </div>
+                                    <div class='text-left'>
+                                        Xem chi tiết
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class='row'>
+            <div class='featured'>
+                <div class='row'>
+
+                    <div class='col'>
+
+                        <a href='teacher/list_lhp'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-briefcase' aria-hidden='true'></i>
+                                </div>
+                                <span>Danh sách lớp học phần</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='#'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-bar-chart' aria-hidden='true'></i>
+                                </div>
+                                <span>Chấm điểm</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='#'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-calendar' aria-hidden='true'></i>
+                                </div>
+                                <span>Lịch theo tuần</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='#'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-newspaper-o' aria-hidden='true'></i>
+                                </div>
+                                <span>Lịch theo tiến độ</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='#'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+
+                                    <i class='fa fa-calendar-check-o' aria-hidden='true'></i>
+                                </div>
+                                <span>Lịch toàn trường</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='teacher/create-lophocphan-form'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-plus-square-o' aria-hidden='true'></i>
+                                </div>
+                                <span>Tạo lớp học phần</span>
+                            </div>
+                        </a>
+
+                    </div>
+                    <div class='col'>
+
+                        <a href='#'>
+                            <div class='box-df featured-item'>
+                                <div class='icon'>
+                                    <i class='fa fa-usd' aria-hidden='true'></i>
+                                </div>
+                                <span>Tra cứu công nợ</span>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'></div>
+
+    {{/if}}
+</div>

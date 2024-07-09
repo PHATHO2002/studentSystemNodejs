@@ -1,6 +1,13 @@
 * {
   box-sizing: border-box; }
 
+.box-df {
+  background-color: #fff;
+  min-height: 20px;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px !important; }
+
 .button {
   font-size: 16px;
   padding: 0 20px 0 20px;
@@ -27,6 +34,8 @@
   height: 57px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   padding: 0 50px 0 50px; }
+  #header a {
+    color: 667580; }
   #header .header_content {
     display: flex;
     align-items: center;
@@ -72,6 +81,59 @@
           padding: 0 20px 0 20px; }
           #header .header_content .menu_top ul li a {
             text-decoration: none; }
+        #header .header_content .menu_top ul .us-links {
+          display: none;
+          position: absolute;
+          top: 50px;
+          right: 20px;
+          border: 1px solid #e7ecf0;
+          padding: 0;
+          cursor: pointer; }
+          #header .header_content .menu_top ul .us-links li {
+            padding: 0;
+            border-bottom: 1px solid #e7ecf0; }
+            #header .header_content .menu_top ul .us-links li a {
+              font-size: 13px;
+              padding: 10px 20px;
+              display: block; }
 
 #container {
-  margin-top: 57px; }
+  height: 100%;
+  margin-top: 67px;
+  background-color: #e7ecf0; }
+  #container .content {
+    margin: 0 40px;
+    padding-top: 10px; }
+    #container .content .profile-user {
+      height: 238px; }
+      #container .content .profile-user .profile-title {
+        font-size: 18px;
+        line-height: 18px;
+        padding: 10px 5px;
+        font-weight: 600; }
+      #container .content .profile-user .profile-body .profile-userpic img {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 10px;
+        border-radius: 50%; }
+      #container .content .profile-user .profile-body .profile-userdoc {
+        display: flex; }
+        #container .content .profile-user .profile-body .profile-userdoc ul {
+          list-style: none; }
+          #container .content .profile-user .profile-body .profile-userdoc ul li {
+            font-size: 14px;
+            opacity: 0.8;
+            padding: 5px 10px; }
+            #container .content .profile-user .profile-body .profile-userdoc ul li span {
+              opacity: 1;
+              font-weight: 700; }
+    #container .content .study-schedule a {
+      text-decoration: none; }
+    #container .content .featured a {
+      text-decoration: none; }
+    #container .content .featured .featured-item {
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center; }

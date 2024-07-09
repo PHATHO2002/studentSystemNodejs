@@ -5,13 +5,16 @@
         <title>Document</title>
         <link rel='stylesheet' href='css/bootstrap.css' />
         <link rel='stylesheet' href='css/app.css' />
+        <link rel='stylesheet' href='css/changePsw.css' />
+
         <link
             rel='stylesheet'
             href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
         />
 
-    </head>
+        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'></script>
 
+    </head>
     <body>
         <div id='app'>
 
@@ -37,19 +40,63 @@
                     <div class='menu_top'>
                         <ul>
                             <li>
-                                <a href='#' title=''>
+                                <a href='/' title=''>
                                     <span><i class='fa fa-home' aria-hidden='true'></i></span>
                                     Trang chủ
+
                                 </a>
                             </li>
-                            <li>
-                                <a id='spanBell' href='#' title=''><span>
-                                        <i class='fa fa-bell-o' aria-hidden='true'></i>&nbsp;&nbsp;Tin tức
-                                    </span><span
-                                        style='left: 7px;top: -7px;min-width:16px ;width:fit-content; max-width:20px ;animation: bellmove 0.5s 5;'
-                                        class='badge badge-danger'
-                                    >80</span></a>
-                            </li>
+                            {{#if userData}}
+                                {{#if userData.isStudent}}
+                                    <li class='user-info'>
+
+                                        <img
+                                            class='user-account-img'
+                                            src='{{{userData.avatar}}}'
+                                            style='width: 30px;height: 30px;border-radius: 50% !important;object-fit: cover;'
+                                        />
+                                        <a class='user-account-name' href='#' title=''>
+                                            {{{userData.LastName}}}
+                                            {{{userData.FirstName}}}
+                                        </a>
+                                        <i class='fa fa-caret-down user-account-name-caret-down' aria-hidden='true'></i>
+
+                                    </li>
+
+                                    <ul class='us-links'>
+
+                                        <li><a href='changePsw_form'>Đổi mật khẩu</a></li>
+                                        <li><a href='/logout' title=''>Đăng xuất</a></li>
+                                    </ul>
+                                {{else}}
+                                    <li class='user-info'>
+
+                                        <img
+                                            class='user-account-img'
+                                            src='images/avatar1.jpg'
+                                            style='width: 30px;height: 30px;border-radius: 50% !important;object-fit: cover;'
+                                        />
+                                        <a class='user-account-name' href='#' title=''>
+                                            {{{userData.LastName}}}
+                                            {{{userData.FirstName}}}
+                                        </a>
+                                        <i class='fa fa-caret-down user-account-name-caret-down' aria-hidden='true'></i>
+
+                                    </li>
+
+                                    <ul class='us-links'>
+
+                                        <li><a href='changePsw_form'>Đổi mật khẩu</a></li>
+                                        <li><a href='/logout' title=''>Đăng xuất</a></li>
+                                    </ul>
+                                {{/if}}
+
+                            {{else}}
+
+                                <a href='/login-form' class='Login-button'>Login</a>
+
+                            {{/if}}
+
                         </ul>
                     </div>
 

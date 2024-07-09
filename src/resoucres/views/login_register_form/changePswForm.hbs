@@ -1,0 +1,20 @@
+<form class='change-psw-form' method='post' action='change-psw'>
+    <div class='mb-3'>
+        <label for='exampleInputPassword1' class='form-label'>Mật khẩu hiện tại</label>
+        <input type='password' class='form-control' id='exampleInputPassword1' name='curentPsw' required />
+    </div>
+    <div class='mb-3'>
+        <label for='exampleInputPassword1' class='form-label'>Mật khẩu mới </label>
+        <input type='password' class='form-control' id='exampleInputPassword1 ' name='newPsw' required />
+    </div>
+    <div class='mb-3'>
+        <label for='exampleInputPassword1' class='form-label'>xác nhận mật khẩu mới</label>
+        <input type='password' class='form-control' id='exampleInputPassword1' name='confirmPsw' required />
+    </div>
+    <button type='submit' class='btn btn-primary'>Đổi mật khẩu</button>
+    {{#if error.errCode}}
+        <P>{{error.message}}</P>
+    {{else}}
+        <p>{{error.message}}</p>
+    {{/if}}
+</form>

@@ -1,0 +1,28 @@
+<table class='table table-striped table-hover' style='width: 900px; margin:auto'>
+    <thead>
+        <tr>
+            <th>Tên lớp học phần</th>
+            <th>Trạng thái</th>
+            <th>số lượng tín chỉ</th>
+            <th>Số lượng sinh viên</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {{#each lhpData.data}}
+
+            <tr>
+                <td>{{this.name}}</td>
+                <td>{{#if this.state}}
+                        Mở
+                    {{else}}
+                        Đóng
+                    {{/if}}</td>
+                <td>{{this.quantityoftinchi}}</td>
+                <td>{{this.quantityOfstudents}}</td>
+
+            </tr>
+
+        {{/each}}
+    </tbody>
+</table>

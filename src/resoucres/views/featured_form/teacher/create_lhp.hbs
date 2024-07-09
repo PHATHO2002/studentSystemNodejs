@@ -1,0 +1,19 @@
+<form action='create_lhp' method='post'>
+    <label for=''>Tên Học Phần</label>
+    <input type='text' name='name' />
+    <p>Tình trạng</p>
+
+    <label for='stateOpen'>Mở</label>
+    <input type='radio' id='stateOpen' name='state' value='1' />
+    <label for='stateClose'>Đóng</label>
+    <input type='radio' id='stateClose' name='state' value='0' />
+    <label for='quantityOfStudens'>số lượng sinh viên</label>
+    <input type='number' id='quantityOfStudens' name='quantityOfstudents' />
+    <label for='quantityOftinchi'>số lượng tín chỉ</label>
+    <input type='number' id='quantityOftinchi' name='quantityoftinchi' />
+    <input type='submit' value='Tạo' />
+
+    {{#if lophocphanData}}
+        <p>{{lophocphanData.message}}</p>
+    {{/if}}
+</form>

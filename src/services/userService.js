@@ -1,5 +1,5 @@
-const db = require('../config/database');
-let randomString = (length) => {
+const db = require('../models/index');
+const randomString = (length) => {
     return new Promise((resolve, reject) => {
         var result = '';
         var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -12,111 +12,157 @@ let randomString = (length) => {
 };
 // lay ra niên khóa hiện tại
 let Nienkhoa = () => {
-    return new Promise((resolve, reject) => {
-        db.query(
-            `SELECT makhoa
-                FROM Nienkhoa ORDER BY makhoa ASC;`,
-            (err, results) => {
-                if (err) {
-                    throw err;
-                } else {
-                    resolve(results[results.length - 1].makhoa);
-                }
-            },
-        );
-    });
-};
-let Mssv = () => {
-    return new Promise((resolve, reject) => {
-        db.query(
-            `SELECT zero_thousand
-                FROM array ORDER By zero_thousand ASC;`,
-            (err, results) => {
-                if (err) {
-                    throw err;
-                } else {
-                    let arr = [];
-                    for (let i = 0; i < results.length; i++) {
-                        arr.push(results[i].zero_thousand);
-                    }
+    return new Promise(async (resolve, reject) => {
+        try {
+            const result = await db.Nienkhoa.findOne({
+                attributes: ['makhoa'],
+                order: [['makhoa', 'DESC']],
+            });
 
-                    resolve(arr[0]);
-                }
-            },
-        );
-    });
-};
-let reduceNumber = (mssvWasCreated) => {
-    return new Promise((resolve, reject) => {
-        db.query(
-            `DELETE FROM array
-            WHERE zero_thousand = ${mssvWasCreated};`,
-            (err, results) => {
-                if (err) {
-                    throw err;
-                } else {
-                    resolve(true);
-                }
-            },
-        );
-    });
-};
-let getCurrentYear = () => {
-    return new Promise((resolve, reject) => {
-        let currentDate = new Date();
-        // Lấy ra năm hiện tại từ đối tượng Date
+            if (!result) {
+                reject('No data found');
+            }
 
-        resolve(currentDate.getFullYear());
+            resolve(result.makhoa);
+        } catch (err) {
+            reject(err);
+            // Xử lý lỗi tại đây nếu cần
+        }
     });
 };
-class UserService {
-    createUser(data) {
+
+const UserService = {
+    createUser: (studentData) => {
         return new Promise(async (resolve, reject) => {
-            let { lName, fName, date, adress, sex, avatarCloud, major } = data;
-            let psw = await randomString(8);
-            let nienkhoa = await Nienkhoa();
-            let orderSv = await Mssv();
-            if (!orderSv) {
-                reject({ errCode: 1, message: 'full student', data: {} });
-            } else {
-                let mssv = (await getCurrentYear()) + orderSv.toString().padStart(3, '0');
-                db.query(
-                    `INSERT INTO Student (mssv, LastName,FirstName,birtday,adress,sex,password,avatar,majorCode,makhoa)
-                            VALUES ('${mssv}','${lName}','${fName}','${date}','${adress}','${Number(sex)}','${psw}','${avatarCloud}','${major}','${nienkhoa}')`,
-                    async (err, results) => {
-                        if (err) {
-                            throw err;
-                        } else {
-                            let isreduceNumber = await reduceNumber(orderSv);
-                            if (isreduceNumber) {
-                                resolve({ errCode: 0, message: 'register successfully', data: { mssv, psw } });
-                            }
+            let { accountName, lName, fName, date, adress, sex, avatarCloud, major } = studentData;
+            if (accountName && lName && fName && date && adress && sex && avatarCloud && major) {
+                try {
+                    let psw = await randomString(8);
+                    let nienkhoa = await Nienkhoa();
+                    try {
+                        const student = await db.Students.create({
+                            accountName: accountName,
+                            LastName: lName,
+                            FirstName: fName,
+                            birtday: date,
+                            adress: adress,
+                            sex: Number(sex),
+                            password: psw,
+                            avatar: avatarCloud,
+                            majorCode: major,
+                            makhoa: nienkhoa,
+                        });
+                        if (student) {
+                            resolve({ errCode: 0, message: 'đăng ký thành công', data: { accountName, psw } });
                         }
-                    },
-                );
+                    } catch (err) {
+                        if (err.parent.code == 'ER_DUP_ENTRY') {
+                            reject({ errCode: 2, message: `${accountName} đã có người sử dụng!`, data: studentData });
+                        } else throw err;
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi đăng ký:', error);
+                    reject(error);
+                }
+            } else {
+                resolve({ errCode: 3, message: 'chưa nhập dữ liệu', data: null });
             }
         });
-    }
-    login(data) {
-        return new Promise((resolve, reject) => {
-            db.query(
-                `SELECT * 
-                    FROM Student 
-                    WHERE mssv = '${data.mssv}' AND password ='${data.psw}';`,
-                (err, results) => {
-                    if (err) {
-                        throw err;
-                    } else {
-                        if (results.length > 0) {
-                            resolve({ errCode: 0, message: 'login successfully', data: results });
-                        } else {
-                            reject({ errCode: 1, message: 'psw or mssv is wrong', data: results });
-                        }
-                    }
-                },
-            );
-        });
-    }
-}
+    },
+    login: (data) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let user;
+                if (data.position == '1') {
+                    user = await db.Students.findOne({
+                        where: {
+                            accountName: data.accountName,
+                            password: data.psw,
+                        },
+                        attributes: { exclude: ['password'] },
+                    });
+                    user.isStudent = true;
+                } else if (data.position == '2') {
+                    user = await db.Teachers.findOne({
+                        where: {
+                            accountName: data.accountName,
+                            password: data.psw,
+                        },
+                        attributes: { exclude: ['password'] },
+                    });
+                }
 
-module.exports = new UserService();
+                if (user) {
+                    resolve({ errCode: 0, message: 'Đăng nhập thành công', data: user });
+                } else {
+                    resolve({ errCode: 1, message: 'tên đăng nhập hoặc mật khẩu sai', data: null });
+                }
+            } catch (error) {
+                console.error('Lỗi khi đăng nhập :', error);
+                reject(error);
+            }
+        });
+    },
+    changePsw: (userData, data) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let user;
+                if (userData.role == '1') {
+                    user = await db.Students.findOne({
+                        where: {
+                            accountName: userData.accountName,
+                            password: data.curentPsw,
+                        },
+                        attributes: ['password'], // Chỉ bao gồm trường 'password'
+                    });
+                } else if (userData.role == '2') {
+                    user = await db.Teachers.findOne({
+                        where: {
+                            accountName: userData.accountName,
+                            password: data.curentPsw,
+                        },
+                        attributes: ['password'], // Chỉ bao gồm trường 'password'
+                    });
+                }
+
+                if (data) {
+                    if (user) {
+                        if (data.newPsw !== data.confirmPsw) {
+                            reject({ errCode: 3, message: 'Mật khẩu nhập lại ko trùng hợp', data: userData });
+                        }
+                        if (userData.role == '1') {
+                            await db.Students.update(
+                                { password: data.newPsw },
+                                {
+                                    where: {
+                                        accountName: userData.accountName,
+                                    },
+                                },
+                            );
+                        } else if (userData.role == '2') {
+                            await db.Teachers.update(
+                                { password: data.newPsw },
+                                {
+                                    where: {
+                                        accountName: userData.accountName,
+                                    },
+                                },
+                            );
+                        }
+
+                        resolve({ errCode: 0, message: 'Đổi mật khẩu thành công', data: userData });
+                    } else {
+                        resolve({ errCode: 2, message: 'Nhập sai mật khẩu hiện tại', data: userData });
+                    }
+                } else {
+                    resolve({ errCode: 1, message: 'Chưa Nhập dữ liệu', data: userData });
+                }
+            } catch (error) {
+                console.error('Lỗi khi đổi mật khẩu :', error);
+                reject(error);
+            }
+        });
+    },
+};
+
+module.exports = UserService;
