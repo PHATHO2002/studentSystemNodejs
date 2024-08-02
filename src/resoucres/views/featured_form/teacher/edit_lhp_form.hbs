@@ -1,0 +1,53 @@
+<h1
+    style='text-align: center;
+    padding: 20px;'
+>Chỉnh sửa lớp học phần</h1>
+<form method='post' action='/teacher/update_lhp?lhpId={{lhp.data.lhpId}}' style='width:400px; margin:auto'>
+    <div class='mb-3'>
+        <label for='name' class='form-label'>Tên lớp học phần</label>
+        <input type='text' class='form-control' id='name' name='name' value='{{lhp.data.name}}' required />
+
+    </div>
+    <div style='display: flex;justify-content: space-between;' class='mb-3'>
+        <div class=''>
+
+            <label for='state' class='form-label'>Trạng thái lớp học phần:</label>
+            <select name='state' style='display: block;' name='' id='state'>
+                {{#if lhp.data.state}}
+                    <option value='1' selected>Mở</option>
+                    <option value='0'>Đóng</option>
+                {{else}}
+                    <option value='1'>Mở</option>
+                    <option value='0' selected>Đóng</option>
+                {{/if}}
+
+            </select>
+        </div>
+        <div class=''>
+            <label for='tinchi' class='form-label'>Số lượng tín chỉ:</label>
+            <input
+                name='quantityoftinchi'
+                type='number'
+                class='form-control'
+                id='tinchi'
+                value='{{lhp.data.quantityoftinchi}}'
+                required
+            />
+        </div>
+
+    </div>
+    <div class='mb-3'>
+        <label for='quantity' class='form-label'>Số lượng sinh viên:</label>
+        <input
+            name='quantityOfstudents'
+            style='width: 50%;'
+            type='number'
+            class='form-control'
+            id='quantity'
+            value='{{lhp.data.quantityOfstudents}}'
+            required
+        />
+
+    </div>
+    <button type='submit' class='btn btn-primary'>Chỉnh sửa</button>
+</form>

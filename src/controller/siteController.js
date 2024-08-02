@@ -1,7 +1,16 @@
 const SiteController = {
     getDashBoard: async (req, res) => {
         if (req.session.userData) {
-            return res.render('dashboard', { userData: req.session.userData });
+            let today = new Date();
+            let year = today.getFullYear();
+            let month = today.getMonth();
+            let date = today.getDate();
+            let dateToday = {
+                year,
+                month,
+                date,
+            };
+            return res.render('dashboard', { userData: req.session.userData, today: dateToday });
         } else {
             return res.redirect('/login-form');
         }

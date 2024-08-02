@@ -2,12 +2,12 @@
     style='text-align: center;text-align: center;
     font-weight: 600;
     padding: 20px; '
->Đăng ký học phần</h1>
+>Danh sách lớp học phần đã đăng ký</h1>
 
-{{#if listlhpopen.errCode}}
+{{#if listLhpRegister.errCode}}
 
     <div style='text-align: center;' class='alert alert-primary' role='alert'>
-        {{listlhpopen.message}}
+        {{listLhpRegister.message}}
     </div>
 {{else}}
     <table class='table table-success table-striped' style='width: 900px; margin:auto'>
@@ -16,14 +16,14 @@
                 <th>Tên lớp học phần</th>
                 <th>Trạng thái</th>
                 <th>số lượng tín chỉ</th>
-                <th>Số lượng đã đăng ký</th>
+
                 <th>Action</th>
 
             </tr>
         </thead>
         <tbody>
 
-            {{#each listlhpopen.data}}
+            {{#each listLhpRegister.data}}
                 <tr>
                     <td>{{this.name}}</td>
                     <td>{{#if this.state}}
@@ -32,18 +32,11 @@
                             Đóng
                         {{/if}}</td>
                     <td>{{this.quantityoftinchi}}</td>
-                    <td>{{this.quantityOfRegisteredStudent}}/{{this.quantityOfstudents}}</td>
+
                     <td>
-                        <a href='/student/get-scheduleOfLhp?lhpId={{this.lhpId}}'>
+                        <a href='/student/remove-registedLhp?lhpId={{this.lhpId}}&state={{this.state}}'>
                             <button type='button' class='btn btn-secondary'>
-                                Xem lịch
-                            </button>
-                        </a>
-                        <a
-                            href='/student/register-lhp?lhpId={{this.lhpId}}&quantityOfRegistered={{this.quantityOfRegisteredStudent}}&quantityOfstudents={{this.quantityOfstudents}}'
-                        >
-                            <button type='button' class='btn btn-secondary'>
-                                Đăng ký
+                                Hủy
                             </button>
                         </a>
 

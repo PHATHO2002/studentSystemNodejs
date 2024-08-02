@@ -1,0 +1,19 @@
+<h1 style='text-align: center; padding:20px'>Lịch học trong tuần</h1>
+<div
+    style='display: flex; flex-wrap: wrap; max-width:1000px;margin:auto;justify-content: space-around;'
+    class='studySchedule'
+>
+    <a href=''> <button type='button' class='btn btn-outline-primary'>Tuần Trước</button></a>
+
+    {{#each studySchedule.data}}
+        <div style='padding: 10px;width:20%;text-align: center;  border: 2px solid ; ' class=''>
+            <p>Học Phần {{this.name}}</p>
+            <p> {{this.dayOfWeek}}</p>
+            <p>Ngày {{this.date}}</p>
+            <p>Bắt dầu: {{this.startTime}} - Kết thúc: {{this.endTime}}</p>
+            <p>Giáo viên: {{this.teacherName}}</p>
+        </div>
+
+    {{/each}}
+    <a href=''> <button type='button' class='btn btn-outline-primary'>Tuần Tiếp</button></a>
+</div>

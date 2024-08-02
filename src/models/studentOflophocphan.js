@@ -13,13 +13,15 @@ module.exports = (sequelize, DataTypes) => {
     }
     StudentsOfLophocPhan.init(
         {
-            svId: {
+            id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
             },
+            svId: {
+                type: DataTypes.INTEGER,
+            },
             lhpId: {
                 type: DataTypes.INTEGER,
-                primaryKey: true,
             },
         },
         {

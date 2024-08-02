@@ -1,3 +1,4 @@
+<h1 style='padding: 20px;text-align: center;'>Danh sách lớp học phần đã tạo</h1>
 <table class='table table-striped table-hover' style='width: 900px; margin:auto'>
     <thead>
         <tr>
@@ -5,6 +6,7 @@
             <th>Trạng thái</th>
             <th>số lượng tín chỉ</th>
             <th>Số lượng sinh viên</th>
+            <th>Action</th>
 
         </tr>
     </thead>
@@ -20,6 +22,18 @@
                     {{/if}}</td>
                 <td>{{this.quantityoftinchi}}</td>
                 <td>{{this.quantityOfstudents}}</td>
+                <td>
+                    <a href='/teacher/get-edit-lhp-form?lhpId={{this.lhpId}}'>
+                        <button type='button' class='btn btn-secondary'>
+                            Chỉnh sửa
+                        </button>
+                    </a>
+                    <a href='/teacher/remove_lhp?lhpId={{this.lhpId}}'>
+                        <button type='button' class='btn btn-primary'>
+                            Xóa
+                        </button>
+                    </a>
+                </td>
 
             </tr>
 

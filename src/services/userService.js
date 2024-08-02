@@ -61,8 +61,10 @@ const UserService = {
                         } else throw err;
                     }
                 } catch (error) {
-                    console.error('Lỗi khi đăng ký:', error);
-                    reject(error);
+                    reject({
+                        message: 'error at createUser UserService',
+                        details: error,
+                    });
                 }
             } else {
                 resolve({ errCode: 3, message: 'chưa nhập dữ liệu', data: null });
@@ -81,7 +83,12 @@ const UserService = {
                         },
                         attributes: { exclude: ['password'] },
                     });
-                    user.isStudent = true;
+                    if (user) {
+                        user.isStudent = true;
+                        resolve({ errCode: 0, message: 'Đăng nhập thành công', data: user });
+                    } else {
+                        resolve({ errCode: 1, message: 'tên đăng nhập hoặc mật khẩu sai', data: null });
+                    }
                 } else if (data.position == '2') {
                     user = await db.Teachers.findOne({
                         where: {
@@ -98,8 +105,10 @@ const UserService = {
                     resolve({ errCode: 1, message: 'tên đăng nhập hoặc mật khẩu sai', data: null });
                 }
             } catch (error) {
-                console.error('Lỗi khi đăng nhập :', error);
-                reject(error);
+                reject({
+                    message: 'error at login UserService',
+                    details: error,
+                });
             }
         });
     },
@@ -128,7 +137,7 @@ const UserService = {
                 if (data) {
                     if (user) {
                         if (data.newPsw !== data.confirmPsw) {
-                            reject({ errCode: 3, message: 'Mật khẩu nhập lại ko trùng hợp', data: userData });
+                            resolve({ errCode: 3, message: 'Mật khẩu nhập lại ko trùng hợp', data: userData });
                         }
                         if (userData.role == '1') {
                             await db.Students.update(
@@ -158,8 +167,10 @@ const UserService = {
                     resolve({ errCode: 1, message: 'Chưa Nhập dữ liệu', data: userData });
                 }
             } catch (error) {
-                console.error('Lỗi khi đổi mật khẩu :', error);
-                reject(error);
+                reject({
+                    message: 'error at changePsw UserService',
+                    details: error,
+                });
             }
         });
     },

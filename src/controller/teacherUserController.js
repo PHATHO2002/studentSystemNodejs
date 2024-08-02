@@ -5,15 +5,15 @@ const teacherController = {
         try {
             req.body.teacherId = req.session.userData.teacherId;
             let response = await teacherService.createLhp(req.body);
-            return res.render('featured_form/teacher/create_lhp', {
-                userData: req.session.userData,
-                lophocphanData: response,
-            });
+            return res.send(`
+                <script>
+                    alert('${response.message} ${response.data.name}');
+                    window.location.href = '/teacher/create-lophocphan-form';
+                </script>
+            `);
         } catch (error) {
-            return res.render('featured_form/teacher/create_lhp', {
-                userData: req.session.userData,
-                lophocphanData: error,
-            });
+            console.log(error);
+            res.status(500).send('Lỗi Server Nội bộ');
         }
     },
     getCreateLhpForm: (req, res) => {
@@ -30,7 +30,56 @@ const teacherController = {
             });
             // console.log(response);
         } catch (error) {
+            console.log(error);
             res.status(500).send('Lỗi Server Nội bộ');
+        }
+    },
+    getEditLhpForm: async (req, res) => {
+        try {
+            let data = req.query;
+            data.teacherId = req.session.userData.teacherId;
+
+            let response = await teacherService.getLhp(data);
+            res.render('featured_form/teacher/edit_lhp_form.hbs', {
+                userData: req.session.userData,
+                lhp: response,
+            });
+        } catch (error) {
+            console.log(error);
+
+            res.status(500).send('Lỗi Server Nội bộ');
+        }
+    },
+    updateLhp: async (req, res) => {
+        try {
+            let data = req.body;
+            data.lhpId = req.query.lhpId;
+            let response = await teacherService.updateLhp(data);
+
+            return res.send(`
+                <script>
+                    alert('${response.message}');
+                    window.location.href = '/teacher/get-edit-lhp-form?lhpId=${data.lhpId}';
+                </script>
+            `);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Lỗi Server Nội bộ');
+        }
+    },
+    removeLhp: async (req, res) => {
+        try {
+            let lhpId = req.query.lhpId;
+            let response = await teacherService.removeLhp(lhpId);
+            res.send(`
+            <script>
+                alert('${response.message}');
+                window.location.href = '/teacher/list_lhp';
+            </script>
+        `);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send('Lỗi Server Nội bộ');
         }
     },
 };

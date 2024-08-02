@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Lophocphan extends Model {
+    class StudySchedule extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,29 +11,40 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
         }
     }
-    Lophocphan.init(
+    StudySchedule.init(
         {
-            lhpId: {
+            id: {
                 type: DataTypes.INTEGER,
-                autoIncrement: true,
                 primaryKey: true,
             },
-            name: DataTypes.STRING,
-            teacherId: DataTypes.INTEGER,
-            state: DataTypes.BOOLEAN,
-            quantityOfstudents: DataTypes.INTEGER,
-            quantityoftinchi: DataTypes.INTEGER,
+            date: {
+                type: DataTypes.DATE,
+            },
+            startTime: {
+                type: DataTypes.STRING,
+            },
+            quantityOftiet: {
+                type: DataTypes.INTEGER,
+            },
+            lhpId: {
+                type: DataTypes.INTEGER,
+            },
+            endTime: {
+                type: DataTypes.STRING,
+            },
         },
         {
             sequelize,
 
-            modelName: 'Lophocphans',
-            tableName: 'lophocphan',
+            modelName: 'StudySchedule',
+            tableName: 'studySchedule',
             timestamps: false, // Disable createdAt and updatedAt
+
             defaultScope: {
                 raw: true,
             },
+            removeAttr: 'id',
         },
     );
-    return Lophocphan;
+    return StudySchedule;
 };

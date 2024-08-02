@@ -1,5 +1,7 @@
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 .box-df {
     background-color: #fff;
@@ -115,7 +117,6 @@
     }
 }
 #container {
-    height: 100%;
     margin-top: 67px;
     background-color: #e7ecf0;
     .content {

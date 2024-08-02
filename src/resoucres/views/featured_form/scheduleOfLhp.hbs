@@ -1,0 +1,30 @@
+<div style='width: 900px; margin:auto;' class='schedule-lhp-tbale'>
+
+    <h1 style='text-align: center;    padding: 20px;'>Lịch học học phần {{scheduleOfLhp.name}} </h1>
+    <table style='' class='table'>
+        <thead>
+            <tr>
+
+                <th scope='col'>Ngày</th>
+                <th scope='col'>Giờ Bắt đầu</th>
+                <th scope='col'>Giờ kết thúc</th>
+                <th scope='col'>Số lượng tiết </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {{#each scheduleOfLhp.ScheduleOfLhp}}
+
+                <tr>
+
+                    <td>{{this.date}}</td>
+                    <td>{{this.startTime}}</td>
+                    <td>{{this.endTime}}</td>
+                    <td>{{this.quantityOftiet}}</td>
+
+                </tr>
+            {{/each}}
+
+        </tbody>
+    </table>
+</div>

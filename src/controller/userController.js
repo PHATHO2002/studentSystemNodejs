@@ -12,6 +12,8 @@ const UserController = {
             }
             return res.render('login_register_form/mssv_psw', { layout: false, userData: response });
         } catch (error) {
+            console.log(error);
+
             res.status(500).send('Lỗi Server Nội bộ');
         }
     },
@@ -19,9 +21,14 @@ const UserController = {
     login: async (req, res) => {
         try {
             let response = await userService.login(req.body);
-            req.session.userData = response.data;
-            return res.redirect('/');
-        } catch (err) {
+            if (response.errCode) {
+                return res.render('login_register_form/loginForm', { layout: false, userData: response });
+            } else {
+                req.session.userData = response.data;
+                return res.redirect('/');
+            }
+        } catch (error) {
+            console.log(error);
             res.status(500).send('Lỗi Server Nội bộ');
         }
     },
@@ -29,6 +36,8 @@ const UserController = {
         req.session.regenerate((err) => {
             if (err) {
                 console.error('Error regenerating session:', err);
+                res.status(500).send('Lỗi Server Nội bộ');
+
                 // Xử lý lỗi
             } else {
                 // Phiên làm việc đã được tạo lại thành công
@@ -46,7 +55,6 @@ const UserController = {
             return res.render('login_register_form/changePswForm', { error: response, userData: userData });
         } catch (error) {
             console.log(error);
-
             return res.render('login_register_form/changePswForm', { error: error, userData: userData });
         }
     },
