@@ -176,9 +176,17 @@ const studentStudentService = {
             }
         });
     },
-    getStudySchedule: (svId, requestDate) => {
+    getWeekStudySchedule: (svId, requestDate) => {
         return new Promise(async (resolve, reject) => {
             try {
+                if (!svId || !requestDate.year || !requestDate.month || !requestDate.date) {
+                    resolve({
+                        errCode: 3,
+                        message: 'thiếu dữ liệu kèm theo',
+                        data: null,
+                    });
+                    return;
+                }
                 const registedLhpId = await db.StudentsOfLophocPhan.findAll({
                     // những học phần đã đăng kys
                     where: {
@@ -256,8 +264,15 @@ const studentStudentService = {
                         element.date = formattedDate;
                         element.dayOfWeek = getDayOfWeekString(dayOfWeekNumber);
                     }
-
-                    resolve({ errCode: 0, message: 'lấy học học phần nào', data: weekStudySchedule });
+                    if (weekStudySchedule.length > 0) {
+                        resolve({
+                            errCode: 0,
+                            message: 'lấy học lịch học tuần này thành công',
+                            data: weekStudySchedule,
+                        });
+                    } else {
+                        resolve({ errCode: 2, message: 'tuần này không có tiết học nào', data: null });
+                    }
                 } else {
                     resolve({ errCode: 1, message: 'bạn chưa đăng ký học phần nào', data: null });
                 }

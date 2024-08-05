@@ -48,24 +48,38 @@ const StudenttController = {
             let daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Tính số ngày đến thứ Hai
             let thisMonday = new Date(currentDay);
             thisMonday.setDate(currentDay.getDate() - daysToMonday);
+            // find sunday
+            let thisSunday = new Date(thisMonday);
+            thisSunday.setDate(thisSunday.getDate() + 6);
             // 3. Tính ngày thứ Hai của tuần trước
             let lastMonday = new Date(thisMonday);
             lastMonday.setDate(thisMonday.getDate() - 7); // Trừ đi 7 ngày để lấy tuần trước
 
-            // 4. Tính ngày thứ Hai của tuần sau
+            // 4. last monday
             let nextMonday = new Date(thisMonday);
             nextMonday.setDate(thisMonday.getDate() + 7); // Cộng thêm 7 ngày để lấy tuần sau
-            let lastMondayUseForReq = {
+            let lastMondayUsedForReq = {
                 year: lastMonday.getFullYear(),
                 month: lastMonday.getMonth(),
                 date: lastMonday.getDate(),
             };
-            console.log(lastMondayUseForReq);
-            let response = await studentService.getStudySchedule(req.session.userData.svId, requestDate);
+            // next monday
+            let nextMondayUsedForReq = {
+                year: nextMonday.getFullYear(),
+                month: nextMonday.getMonth(),
+                date: nextMonday.getDate(),
+            };
+            // this monday as string and this sunday as string
+            let thisMondayString = `${thisMonday.getDate()}-${thisMonday.getMonth() + 1}-${thisMonday.getFullYear()}`;
+            let thisSundayString = `${thisSunday.getDate()}-${thisSunday.getMonth() + 1}-${thisSunday.getFullYear()}`;
+            let response = await studentService.getWeekStudySchedule(req.session.userData.svId, requestDate);
             return res.render('featured_form/student/studySchedule.hbs', {
                 userData: req.session.userData,
                 studySchedule: response,
-                lastMonday: lastMondayUseForReq,
+                lastMonday: lastMondayUsedForReq,
+                nextMonday: nextMondayUsedForReq,
+                thisMondayString: thisMondayString,
+                thisSundayString: thisSundayString,
             });
         } catch (error) {
             console.log(error);

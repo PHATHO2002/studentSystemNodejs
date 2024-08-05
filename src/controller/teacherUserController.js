@@ -4,13 +4,24 @@ const teacherController = {
     createlhp: async (req, res) => {
         try {
             req.body.teacherId = req.session.userData.teacherId;
+
             let response = await teacherService.createLhp(req.body);
-            return res.send(`
+
+            if (!response.errCode) {
+                return res.send(`
                 <script>
                     alert('${response.message} ${response.data.name}');
                     window.location.href = '/teacher/create-lophocphan-form';
                 </script>
             `);
+            } else {
+                return res.send(`
+                <script>
+                    alert('${response.message} ');
+                    window.location.href = '/teacher/create-lophocphan-form';
+                </script>
+            `);
+            }
         } catch (error) {
             console.log(error);
             res.status(500).send('Lỗi Server Nội bộ');

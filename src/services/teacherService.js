@@ -56,14 +56,14 @@ const teacherService = {
                     let numberStart = Number(timeStart);
 
                     let startDate = new Date(startYear, startMonth, startDay);
-
+                    console.log(daysOffWeek);
                     if (Array.isArray(daysOffWeek)) {
                         let countStudyDay = 0;
                         while (countStudyDay < quantityOfDay) {
                             for (const element of daysOffWeek) {
-                                if (startDate.getDay() == element) {
+                                if (startDate.getDay() === Number(element)) {
                                     await db.StudySchedule.create({
-                                        date: `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`,
+                                        date: `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
                                         startTime: `${timeTable[numberStart].startHour}:${timeTable[numberStart].startMinute}`,
                                         quantityOftiet: slTiet1buoi,
                                         lhpId: lophocphan.lhpId,
@@ -77,7 +77,7 @@ const teacherService = {
                     } else {
                         let countStudyDay = 0;
                         while (countStudyDay < quantityOfDay) {
-                            if (startDate.getDay() == daysOffWeek) {
+                            if (startDate.getDay() === Number(daysOffWeek)) {
                                 await db.StudySchedule.create({
                                     startTime: `${startDate.getFullYear()}-${startDate.getMonth + 1}-${startDate.getDate()} ${timeTable[numberStart].startHour}:${timeTable[numberStart].startMinute}:00`,
                                     endTime: `${timeTable[endTime].endHour}:${timeTable[endTime].endMinute}`,
