@@ -1,4 +1,27 @@
 const db = require('../models/index');
+const getDayOfWeekString = (dayNumber) => {
+    switch (dayNumber) {
+        case 1:
+            return 'Thứ Hai';
+            break;
+        case 2:
+            return 'Thứ ba';
+            break;
+        case 3:
+            return 'Thứ tư';
+            break;
+        case 4:
+            return 'Thứ năm';
+            break;
+        case 5:
+            return 'Thứ sáu';
+            break;
+        case 6:
+            return 'Thứ bảy';
+            break;
+    }
+};
+
 const teacherService = {
     createLhp: (data) => {
         return new Promise(async (resolve, reject) => {
@@ -151,6 +174,24 @@ const teacherService = {
             }
         });
     },
+    getStudnentLhpList: (lhpId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (lhpId) {
+                    const studentIdOfLhplist = await db.StudentsOfLophocPhan.findAll({
+                        where: {
+                            lhpId: lhpId,
+                        },
+                        attributes: ['svId'],
+                    });
+                    console.log(lhpId, studentIdOfLhplist);
+                    resolve(studentIdOfLhplist);
+                } else {
+                    resolve({ errCode: 1, message: 'thiếu lhpid', data: null });
+                }
+            } catch (error) {}
+        });
+    },
     updateLhp: (data) => {
         return new Promise(async (resolve, reject) => {
             try {
@@ -197,6 +238,101 @@ const teacherService = {
             } catch (error) {
                 reject({
                     message: 'error at createLhp teacherService',
+                    details: error,
+                });
+            }
+        });
+    },
+    getTeachShedule: (teacherId, requestDate) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!teacherId || !requestDate.year || !requestDate.month || !requestDate.date) {
+                    resolve({
+                        errCode: 3,
+                        message: 'thiếu dữ liệu kèm theo',
+                        data: null,
+                    });
+                    return;
+                }
+                const createdLhpId = await db.Lophocphans.findAll({
+                    // những học phần đã đăng kys
+                    where: {
+                        teacherId: teacherId,
+                    },
+                    attributes: ['lhpId', 'name'],
+                });
+
+                if (createdLhpId) {
+                    let teachSchduleArr = [];
+                    for (const lhpIdAndName of createdLhpId) {
+                        let ScheduleOfLhp = await db.StudySchedule.findAll({
+                            where: {
+                                lhpId: lhpIdAndName.lhpId,
+                            },
+                        });
+
+                        for (const element of ScheduleOfLhp) {
+                            element.name = lhpIdAndName.name;
+
+                            teachSchduleArr.push(element);
+                        }
+                    }
+
+                    let startWeekDate = new Date(requestDate.year, requestDate.month, requestDate.date); // handle get current week
+                    let dayStartWeek = startWeekDate.getDay();
+                    let diff = startWeekDate.getDate() - dayStartWeek + (dayStartWeek === 0 ? -6 : 1);
+                    startWeekDate.setDate(diff);
+
+                    for (const element of teachSchduleArr) {
+                        // convert date that form query from db to obj date in js
+
+                        const date = new Date(element.date);
+                        const dayOfWeekNumber = date.getDay();
+                        element.date = date;
+                        element.dayOfWeek = getDayOfWeekString(dayOfWeekNumber);
+                    }
+                    let weekTeachSchedule = [];
+                    for (let i = 0; i < 7; i++) {
+                        let result = teachSchduleArr.filter((element) => {
+                            return (
+                                element.date.getFullYear() === startWeekDate.getFullYear() &&
+                                element.date.getMonth() === startWeekDate.getMonth() &&
+                                element.date.getDate() === startWeekDate.getDate()
+                            );
+                        });
+
+                        if (result.length > 0) {
+                            weekTeachSchedule = [...weekTeachSchedule, ...result];
+                        }
+                        startWeekDate.setDate(startWeekDate.getDate() + 1);
+                    }
+                    for (const element of weekTeachSchedule) {
+                        // Lấy ngày, tháng, năm từ đối tượng Date
+                        const day = String(element.date.getDate()).padStart(2, '0');
+                        const month = String(element.date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+                        const year = element.date.getFullYear();
+                        const dayOfWeekNumber = element.date.getDay();
+
+                        // Định dạng ngày theo DD-MM-YYYY
+                        const formattedDate = `${day}-${month}-${year}`;
+                        element.date = formattedDate;
+                        element.dayOfWeek = getDayOfWeekString(dayOfWeekNumber);
+                    }
+                    if (weekTeachSchedule.length > 0) {
+                        resolve({
+                            errCode: 0,
+                            message: 'lấy học lịch dạy tuần này thành công',
+                            data: weekTeachSchedule,
+                        });
+                    } else {
+                        resolve({ errCode: 2, message: 'tuần này không có tiết học nào', data: null });
+                    }
+                } else {
+                    resolve({ errCode: 1, message: 'bạn chưa đăng ký học phần nào', data: null });
+                }
+            } catch (error) {
+                reject({
+                    message: 'error at getTeacherSchedule teacherService',
                     details: error,
                 });
             }

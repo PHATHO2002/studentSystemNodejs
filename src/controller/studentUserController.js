@@ -1,4 +1,3 @@
-const { response } = require('express');
 const studentService = require('../services/studentService');
 
 const StudenttController = {
@@ -40,7 +39,7 @@ const StudenttController = {
             res.status(500).send('Lỗi Server Nội bộ');
         }
     },
-    getStudySchedule: async (req, res) => {
+    getWeekStudySchedule: async (req, res) => {
         try {
             let requestDate = req.query;
             let currentDay = new Date(Number(requestDate.year), Number(requestDate.month), Number(requestDate.date));
