@@ -1,74 +1,80 @@
 <h1 style='padding: 20px;text-align: center;'>Danh sách lớp học phần đã tạo</h1>
-<table class='table table-striped table-hover' style='width: 900px; margin:auto'>
-    <thead>
-        <tr>
-            <th>Tên lớp học phần</th>
-            <th>Trạng thái</th>
-            <th>số lượng tín chỉ</th>
-            <th>Số lượng sinh viên</th>
-            <th>Action</th>
+{{#if lhpData.errCode}}
+    <div class='alert alert-primary' role='alert'>
+        {{lhpData.message}}
+    </div>
+{{else}}
+    <table class='table table-striped table-hover' style='width: 900px; margin:auto'>
+        <thead>
+            <tr>
+                <th>Tên lớp học phần</th>
+                <th>Trạng thái</th>
+                <th>số lượng tín chỉ</th>
+                <th>Số lượng sinh viên</th>
+                <th>Action</th>
 
-        </tr>
-    </thead>
-    <tbody>
-        {{#if grading}}
-            {{#each lhpData.data}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#if grading}}
+                {{#each lhpData.data}}
 
-                <tr>
-                    <td>{{this.name}}</td>
-                    <td>{{#if this.state}}
-                            Mở
-                        {{else}}
-                            Đóng
-                        {{/if}}</td>
-                    <td>{{this.quantityoftinchi}}</td>
-                    <td>{{this.quantityOfstudents}}</td>
-                    <td>
+                    <tr>
+                        <td>{{this.name}}</td>
+                        <td>{{#if this.state}}
+                                Mở
+                            {{else}}
+                                Đóng
+                            {{/if}}</td>
+                        <td>{{this.quantityoftinchi}}</td>
+                        <td>{{this.quantityOfstudents}}</td>
+                        <td>
 
-                        <a href='/teacher/get-student-lhp-list?lhpId={{this.lhpId}}'>
-                            <button type='button' class='btn btn-secondary'>
-                                Danh sách sinh viên
-                                {{grading}}
-                            </button>
-                        </a>
+                            <a href='/teacher/get-student-lhp-list?lhpId={{this.lhpId}}&name={{this.name}}'>
+                                <button type='button' class='btn btn-secondary'>
+                                    Danh sách sinh viên
 
-                    </td>
+                                </button>
+                            </a>
 
-                </tr>
+                        </td>
 
-            {{/each}}
-        {{else}}
-            {{#each lhpData.data}}
+                    </tr>
 
-                <tr>
-                    <td>{{this.name}}</td>
-                    <td>{{#if this.state}}
-                            Mở
-                        {{else}}
-                            Đóng
-                        {{/if}}</td>
-                    <td>{{this.quantityoftinchi}}</td>
-                    <td>{{this.quantityOfstudents}}</td>
-                    <td>
+                {{/each}}
+            {{else}}
+                {{#each lhpData.data}}
 
-                        <a href='/teacher/get-edit-lhp-form?lhpId={{this.lhpId}}'>
-                            <button type='button' class='btn btn-secondary'>
-                                Chỉnh sửa
-                                {{grading}}
-                            </button>
-                        </a>
-                        <a href='/teacher/remove_lhp?lhpId={{this.lhpId}}'>
-                            <button type='button' class='btn btn-primary'>
-                                Xóa
-                            </button>
-                        </a>
+                    <tr>
+                        <td>{{this.name}}</td>
+                        <td>{{#if this.state}}
+                                Mở
+                            {{else}}
+                                Đóng
+                            {{/if}}</td>
+                        <td>{{this.quantityoftinchi}}</td>
+                        <td>{{this.quantityOfstudents}}</td>
+                        <td>
 
-                    </td>
+                            <a href='/teacher/get-edit-lhp-form?lhpId={{this.lhpId}}'>
+                                <button type='button' class='btn btn-secondary'>
+                                    Chỉnh sửa
 
-                </tr>
+                                </button>
+                            </a>
+                            <a href='/teacher/remove_lhp?lhpId={{this.lhpId}}'>
+                                <button type='button' class='btn btn-primary'>
+                                    Xóa
+                                </button>
+                            </a>
 
-            {{/each}}
-        {{/if}}
+                        </td>
 
-    </tbody>
-</table>
+                    </tr>
+
+                {{/each}}
+            {{/if}}
+
+        </tbody>
+    </table>
+{{/if}}

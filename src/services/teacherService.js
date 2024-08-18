@@ -174,7 +174,7 @@ const teacherService = {
             }
         });
     },
-    getStudnentLhpList: (lhpId) => {
+    getStudentLhpList: (lhpId) => {
         return new Promise(async (resolve, reject) => {
             try {
                 if (lhpId) {
@@ -184,12 +184,39 @@ const teacherService = {
                         },
                         attributes: ['svId'],
                     });
-                    console.log(lhpId, studentIdOfLhplist);
-                    resolve(studentIdOfLhplist);
+                    if (studentIdOfLhplist.length > 0) {
+                        const studentOfLhpList = [];
+                        for (const element of studentIdOfLhplist) {
+                            const student = await db.Students.findOne({
+                                where: {
+                                    svId: element.svId,
+                                },
+                                attributes: ['LastName', 'FirstName', 'svId', 'makhoa', 'classCode'],
+                            });
+                            studentOfLhpList.push(student);
+                        }
+
+                        resolve({
+                            errCode: 0,
+                            message: 'get succsessfully student of this lhp list',
+                            data: studentOfLhpList,
+                        });
+                    } else {
+                        resolve({
+                            errCode: 2,
+                            message: 'there isnt any student of this lhp',
+                            data: studentIdOfLhplist,
+                        });
+                    }
                 } else {
                     resolve({ errCode: 1, message: 'thiếu lhpid', data: null });
                 }
-            } catch (error) {}
+            } catch (error) {
+                reject({
+                    message: 'error at getStudnentLhpList teacherService',
+                    details: error,
+                });
+            }
         });
     },
     updateLhp: (data) => {

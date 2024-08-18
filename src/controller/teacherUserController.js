@@ -69,9 +69,13 @@ const teacherController = {
         }
     },
     getStudentListOfLhp: async (req, res) => {
-        let response = await teacherService.getStudnentLhpList(req.query.lhpId);
+        let response = await teacherService.getStudentLhpList(req.query.lhpId);
 
-        return res.send(response);
+        return res.render('featured_form/teacher/student_list_of_lhp.hbs', {
+            userData: req.session.userData,
+            studentList: response,
+            name: req.query.name,
+        });
     },
     updateLhp: async (req, res) => {
         try {

@@ -1,0 +1,34 @@
+<h1 style='padding: 20px;text-align: center;'>Danh sách sinh viên lớp học phần {{name}} </h1>
+{{#if studentList.errCode}}
+    <div class='alert alert-primary' role='alert'>
+        {{studentList.message}}
+    </div>
+
+{{else}}
+    <table class='table table-striped table-hover' style='width: 900px; margin:auto'>
+        <thead>
+            <tr>
+                <th>Họ Tên</th>
+                <th>Mã số Sv</th>
+                <th>Lớp</th>
+                <th>Khóa</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            {{#each studentList.data}}
+                <tr>
+                    <td>{{this.FirstName}} {{this.LastName}}</td>
+
+                    <td>{{this.svId}}</td>
+                    <td>{{this.classCode}}</td>
+                    <td>{{this.makhoa}}</td>
+
+                </tr>
+
+            {{/each}}
+
+        </tbody>
+    </table>
+{{/if}}
