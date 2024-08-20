@@ -9,6 +9,7 @@ router.get('/get-student-lhp-list', isAuthenticated, teacherController.getStuden
 
 router.post('/create_lhp', isAuthenticated, teacherController.createlhp);
 router.post('/update_lhp', isAuthenticated, teacherController.updateLhp);
+router.post('/grading', isAuthenticated, teacherController.grading);
 router.get('/remove_lhp', isAuthenticated, teacherController.removeLhp);
 router.get('/get-week-teach-schedule', isAuthenticated, teacherController.getWeekTeachingSchedule);
 

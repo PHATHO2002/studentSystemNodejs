@@ -182,7 +182,7 @@ const teacherService = {
                         where: {
                             lhpId: lhpId,
                         },
-                        attributes: ['svId'],
+                        attributes: ['svId', 'diemchuyencan', 'diemgiuaky', 'diemthi'],
                     });
                     if (studentIdOfLhplist.length > 0) {
                         const studentOfLhpList = [];
@@ -193,6 +193,9 @@ const teacherService = {
                                 },
                                 attributes: ['LastName', 'FirstName', 'svId', 'makhoa', 'classCode'],
                             });
+                            student.diemchuyencan = element.diemchuyencan;
+                            student.diemgiuaky = element.diemgiuaky;
+                            student.diemthi = element.diemthi;
                             studentOfLhpList.push(student);
                         }
 
@@ -265,6 +268,46 @@ const teacherService = {
             } catch (error) {
                 reject({
                     message: 'error at createLhp teacherService',
+                    details: error,
+                });
+            }
+        });
+    },
+    grading: (data) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // check if teacher  created this lhp
+
+                if (!data.lhpId || !data.teacherId || !data.svId) {
+                    resolve({ errCode: 1, message: 'lhpId or teacherId or svId arent exist! ', data: null });
+                    return;
+                }
+                const correctTeacher = await db.Lophocphans.findOne({
+                    where: {
+                        lhpId: data.lhpId,
+                    },
+                    attributes: ['teacherId'],
+                });
+                if (data.teacherId == correctTeacher.teacherId) {
+                    await db.StudentsOfLophocPhan.update(
+                        {
+                            diemchuyencan: data.diemchuyencan,
+                            diemgiuaky: data.diemgiuaky,
+                            diemthi: data.diemthi,
+                        },
+                        {
+                            where: {
+                                svId: data.svId,
+                            },
+                        },
+                    );
+                    resolve({ errCode: 0, message: 'grading succsessfully', data: null });
+                } else {
+                    resolve({ errCode: 2, message: 'you are not allowed to do this', data: null });
+                }
+            } catch (error) {
+                reject({
+                    message: 'error at grading teacherService',
                     details: error,
                 });
             }

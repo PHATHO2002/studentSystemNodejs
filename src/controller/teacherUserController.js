@@ -74,8 +74,29 @@ const teacherController = {
         return res.render('featured_form/teacher/student_list_of_lhp.hbs', {
             userData: req.session.userData,
             studentList: response,
-            name: req.query.name,
+            lhpName: req.query.name,
+            lhpId: req.query.lhpId,
         });
+    },
+    grading: async (req, res) => {
+        try {
+            let data = req.body;
+            data.svId = req.query.svId;
+            data.lhpId = req.query.lhpId;
+            data.teacherId = req.session.userData.teacherId;
+
+            let response = await teacherService.grading(data);
+
+            return res.send(`
+                <script>
+                    alert('${response.message}');
+                    window.location.href = '/teacher/get-student-lhp-list?lhpId=${data.lhpId}&name=${req.query.name}';
+                </script>
+            `);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Lỗi Server Nội bộ');
+        }
     },
     updateLhp: async (req, res) => {
         try {

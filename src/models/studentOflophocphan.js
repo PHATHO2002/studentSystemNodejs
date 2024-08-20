@@ -23,6 +23,18 @@ module.exports = (sequelize, DataTypes) => {
             lhpId: {
                 type: DataTypes.INTEGER,
             },
+            diemchuyencan: {
+                type: DataTypes.INTEGER,
+            },
+            diemgiuaky: {
+                type: DataTypes.INTEGER,
+            },
+            diemthi: {
+                type: DataTypes.INTEGER,
+            },
+            diemtongket: {
+                type: DataTypes.INTEGER,
+            },
         },
         {
             sequelize,

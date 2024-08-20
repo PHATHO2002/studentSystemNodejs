@@ -1,4 +1,4 @@
-<h1 style='padding: 20px;text-align: center;'>Danh sách sinh viên lớp học phần {{name}} </h1>
+<h1 style='padding: 20px;text-align: center;'>Danh sách sinh viên và kết quả học tập lớp học phần {{lhpName}} </h1>
 {{#if studentList.errCode}}
     <div class='alert alert-primary' role='alert'>
         {{studentList.message}}
@@ -12,6 +12,9 @@
                 <th>Mã số Sv</th>
                 <th>Lớp</th>
                 <th>Khóa</th>
+                <th style="text-align: center;">Điểm</th>
+
+      
 
             </tr>
         </thead>
@@ -24,6 +27,22 @@
                     <td>{{this.svId}}</td>
                     <td>{{this.classCode}}</td>
                     <td>{{this.makhoa}}</td>
+                    <td>
+                        <form style="display: flex;align-items: center;justify-content: space-around;" action='/teacher/grading?svId={{this.svId}}&lhpId={{../lhpId}}&name={{../lhpName}}' method="post">
+                            <label for='dcc'>Điểm chuyên cần:</label>
+                            <input style="width: 50px;" type='Number' name="diemchuyencan" id='dcc' value="{{this.diemchuyencan}}" step="0.01"/>
+                            <label for='dgk'>Điểm giữa kỳ:</label>
+                            <input style="width: 50px;" type='Number' name="diemgiuaky" id='dgk' value="{{this.diemgiuaky}}" step="0.01"/>
+                            <label for='dt'>Điểm thi:</label>
+                            <input style="width: 50px;" type='Number' name="diemthi" id='dt' value="{{this.diemthi}}" step="0.01"/>
+
+                            <input type='submit' value="Chấm điểm" class='btn btn-secondary'>
+                               
+
+                            </input>
+
+                        </form>
+                    </td>
 
                 </tr>
 
