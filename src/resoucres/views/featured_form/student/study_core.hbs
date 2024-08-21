@@ -1,0 +1,32 @@
+<h1 style='text-align: center; padding:20px'>Kết quả học tập</h1>
+{{#if resultsOfLhp.errCode}}
+    <div style='text-align: center;' class='alert alert-primary' role='alert'>
+        {{resultsOfLhp.message}}
+    </div>{{else}}
+    <table class='table'>
+        <thead>
+            <tr>
+                <th scope='col'>Mã lớp học phần</th>
+                <th scope='col'>Tên Lớp học Phần</th>
+                <th scope='col'>Điểm chuyên cần</th>
+                <th scope='col'>Điểm giữa kỳ</th>
+                <th scope='col'>Điểm thi</th>
+                <th scope='col'>Điểm tổng kết</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {{#each resultsOfLhp.data}}
+                <tr>
+                    <td>{{this.lhpId}}</td>
+                    <td>{{this.nameOfLhp}}</td>
+                    <td>{{this.diemchuyencan}}</td>
+                    <td>{{this.diemgiuaky}}</td>
+                    <td>{{this.diemthi}}</td>
+                    <td>{{this.diemtongket}}</td>
+
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+{{/if}}

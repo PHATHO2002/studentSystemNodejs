@@ -132,8 +132,8 @@ const teacherController = {
     },
     getWeekTeachingSchedule: async (req, res) => {
         try {
-            let requestDate = req.query;
-            let currentDay = new Date(Number(requestDate.year), Number(requestDate.month), Number(requestDate.date));
+            let dateRequest = req.query;
+            let currentDay = new Date(Number(dateRequest.year), Number(dateRequest.month), Number(dateRequest.date));
             let dayOfWeek = currentDay.getDay(); // Ngày trong tuần, 0 là Chủ Nhật, 1 là Thứ Hai, v.v.
             let daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Tính số ngày đến thứ Hai
             let thisMonday = new Date(currentDay);
@@ -162,7 +162,7 @@ const teacherController = {
             // this monday as string and this sunday as string
             let thisMondayString = `${thisMonday.getDate()}-${thisMonday.getMonth() + 1}-${thisMonday.getFullYear()}`;
             let thisSundayString = `${thisSunday.getDate()}-${thisSunday.getMonth() + 1}-${thisSunday.getFullYear()}`;
-            let response = await teacherService.getTeachShedule(req.session.userData.teacherId, requestDate);
+            let response = await teacherService.getTeachShedule(req.session.userData.teacherId, dateRequest);
             return res.render('featured_form/student/studySchedule.hbs', {
                 userData: req.session.userData,
                 teachSchedule: response,

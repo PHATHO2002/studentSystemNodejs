@@ -21,26 +21,26 @@ const getDayOfWeekString = (dayNumber) => {
             break;
     }
 };
-
+let timeTable = [
+    { period: 1, startHour: '07', startMinute: '00', endHour: '07', endMinute: '45' },
+    { period: 1, startHour: '07', startMinute: '00', endHour: '07', endMinute: '45' },
+    { period: 2, startHour: '07', startMinute: '50', endHour: '08', endMinute: '35' },
+    { period: 3, startHour: '08', startMinute: '40', endHour: '09', endMinute: '25' },
+    { period: 4, startHour: '09', startMinute: '30', endHour: '10', endMinute: '15' },
+    { period: 5, startHour: '10', startMinute: '20', endHour: '11', endMinute: '05' },
+    { period: 6, startHour: '13', startMinute: '00', endHour: '13', endMinute: '45' },
+    { period: 7, startHour: '13', startMinute: '50', endHour: '14', endMinute: '35' },
+    { period: 8, startHour: '14', startMinute: '40', endHour: '15', endMinute: '25' },
+    { period: 9, startHour: '15', startMinute: '30', endHour: '16', endMinute: '15' },
+    { period: 10, startHour: '16', startMinute: '20', endHour: '17', endMinute: '05' },
+    { period: 11, startHour: '17', startMinute: '10', endHour: '17', endMinute: '55' },
+    { period: 12, startHour: '18', startMinute: '00', endHour: '18', endMinute: '45' },
+    { period: 13, startHour: '18', startMinute: '50', endHour: '19', endMinute: '35' },
+    { period: 14, startHour: '19', startMinute: '40', endHour: '20', endMinute: '25' },
+];
 const teacherService = {
     createLhp: (data) => {
         return new Promise(async (resolve, reject) => {
-            let timeTable = [
-                { period: 1, startHour: '07', startMinute: '00', endHour: '07', endMinute: '45' },
-                { period: 1, startHour: '07', startMinute: '00', endHour: '07', endMinute: '45' },
-                { period: 2, startHour: '07', startMinute: '50', endHour: '08', endMinute: '35' },
-                { period: 3, startHour: '08', startMinute: '40', endHour: '09', endMinute: '25' },
-                { period: 4, startHour: '09', startMinute: '30', endHour: '10', endMinute: '15' },
-                { period: 5, startHour: '10', startMinute: '20', endHour: '11', endMinute: '05' },
-                { period: 6, startHour: '13', startMinute: '00', endHour: '13', endMinute: '45' },
-                { period: 7, startHour: '13', startMinute: '50', endHour: '14', endMinute: '35' },
-                { period: 8, startHour: '14', startMinute: '40', endHour: '15', endMinute: '25' },
-                { period: 9, startHour: '15', startMinute: '30', endHour: '16', endMinute: '15' },
-                { period: 10, startHour: '16', startMinute: '20', endHour: '17', endMinute: '05' },
-                { period: 11, startHour: '17', startMinute: '10', endHour: '17', endMinute: '55' },
-                { period: 12, startHour: '18', startMinute: '00', endHour: '18', endMinute: '45' },
-                { period: 13, startHour: '18', startMinute: '50', endHour: '19', endMinute: '35' },
-            ];
             const {
                 name,
                 state,
@@ -79,7 +79,7 @@ const teacherService = {
                     let numberStart = Number(timeStart);
 
                     let startDate = new Date(startYear, startMonth, startDay);
-                    console.log(daysOffWeek);
+
                     if (Array.isArray(daysOffWeek)) {
                         let countStudyDay = 0;
                         while (countStudyDay < quantityOfDay) {
@@ -289,18 +289,40 @@ const teacherService = {
                     attributes: ['teacherId'],
                 });
                 if (data.teacherId == correctTeacher.teacherId) {
-                    await db.StudentsOfLophocPhan.update(
-                        {
-                            diemchuyencan: data.diemchuyencan,
-                            diemgiuaky: data.diemgiuaky,
-                            diemthi: data.diemthi,
-                        },
-                        {
-                            where: {
-                                svId: data.svId,
+                    let diemchuyencan = Number(data.diemchuyencan);
+                    let diemgiuaky = Number(data.diemgiuaky);
+                    let diemthi = Number(data.diemthi);
+                    if (diemchuyencan && diemgiuaky && diemthi) {
+                        // check if it must have 3 part before updating diemtongket
+                        let diemtongket = diemchuyencan * 0.15 + diemgiuaky * 0.25 + diemthi * 0.6;
+                        await db.StudentsOfLophocPhan.update(
+                            {
+                                diemchuyencan: diemchuyencan,
+                                diemgiuaky: diemgiuaky,
+                                diemthi: diemthi,
+                                diemtongket: diemtongket,
                             },
-                        },
-                    );
+                            {
+                                where: {
+                                    svId: data.svId,
+                                },
+                            },
+                        );
+                    } else {
+                        await db.StudentsOfLophocPhan.update(
+                            {
+                                diemchuyencan: diemchuyencan,
+                                diemgiuaky: diemgiuaky,
+                                diemthi: diemthi,
+                            },
+                            {
+                                where: {
+                                    svId: data.svId,
+                                },
+                            },
+                        );
+                    }
+
                     resolve({ errCode: 0, message: 'grading succsessfully', data: null });
                 } else {
                     resolve({ errCode: 2, message: 'you are not allowed to do this', data: null });
@@ -313,10 +335,10 @@ const teacherService = {
             }
         });
     },
-    getTeachShedule: (teacherId, requestDate) => {
+    getTeachShedule: (teacherId, dateRequest) => {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!teacherId || !requestDate.year || !requestDate.month || !requestDate.date) {
+                if (!teacherId || !dateRequest.year || !dateRequest.month || !dateRequest.date) {
                     resolve({
                         errCode: 3,
                         message: 'thiếu dữ liệu kèm theo',
@@ -348,7 +370,7 @@ const teacherService = {
                         }
                     }
 
-                    let startWeekDate = new Date(requestDate.year, requestDate.month, requestDate.date); // handle get current week
+                    let startWeekDate = new Date(dateRequest.year, dateRequest.month, dateRequest.date); // handle get current week
                     let dayStartWeek = startWeekDate.getDay();
                     let diff = startWeekDate.getDate() - dayStartWeek + (dayStartWeek === 0 ? -6 : 1);
                     startWeekDate.setDate(diff);

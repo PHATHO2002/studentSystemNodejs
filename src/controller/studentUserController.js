@@ -41,8 +41,8 @@ const StudenttController = {
     },
     getWeekStudySchedule: async (req, res) => {
         try {
-            let requestDate = req.query;
-            let currentDay = new Date(Number(requestDate.year), Number(requestDate.month), Number(requestDate.date));
+            let dateRequest = req.query;
+            let currentDay = new Date(Number(dateRequest.year), Number(dateRequest.month), Number(dateRequest.date));
             let dayOfWeek = currentDay.getDay(); // Ngày trong tuần, 0 là Chủ Nhật, 1 là Thứ Hai, v.v.
             let daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Tính số ngày đến thứ Hai
             let thisMonday = new Date(currentDay);
@@ -71,7 +71,7 @@ const StudenttController = {
             // this monday as string and this sunday as string
             let thisMondayString = `${thisMonday.getDate()}-${thisMonday.getMonth() + 1}-${thisMonday.getFullYear()}`;
             let thisSundayString = `${thisSunday.getDate()}-${thisSunday.getMonth() + 1}-${thisSunday.getFullYear()}`;
-            let response = await studentService.getWeekStudySchedule(req.session.userData.svId, requestDate);
+            let response = await studentService.getWeekStudySchedule(req.session.userData.svId, dateRequest);
             return res.render('featured_form/student/studySchedule.hbs', {
                 userData: req.session.userData,
                 studySchedule: response,
@@ -79,6 +79,18 @@ const StudenttController = {
                 nextMonday: nextMondayUsedForReq,
                 thisMondayString: thisMondayString,
                 thisSundayString: thisSundayString,
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send('Lỗi Server Nội bộ');
+        }
+    },
+    getStudyCore: async (req, res) => {
+        try {
+            let response = await studentService.getStudyCore(req.session.userData.svId);
+            return res.render('featured_form/student/study_core.hbs', {
+                userData: req.session.userData,
+                resultsOfLhp: response,
             });
         } catch (error) {
             console.log(error);

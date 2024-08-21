@@ -176,10 +176,10 @@ const studentStudentService = {
             }
         });
     },
-    getWeekStudySchedule: (svId, requestDate) => {
+    getWeekStudySchedule: (svId, dateRequest) => {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!svId || !requestDate.year || !requestDate.month || !requestDate.date) {
+                if (!svId || !dateRequest.year || !dateRequest.month || !dateRequest.date) {
                     resolve({
                         errCode: 3,
                         message: 'thiếu dữ liệu kèm theo',
@@ -224,7 +224,7 @@ const studentStudentService = {
                         }
                     }
 
-                    let startWeekDate = new Date(requestDate.year, requestDate.month, requestDate.date); // handle get current week
+                    let startWeekDate = new Date(dateRequest.year, dateRequest.month, dateRequest.date); // handle get current week
                     let dayStartWeek = startWeekDate.getDay();
                     let diff = startWeekDate.getDate() - dayStartWeek + (dayStartWeek === 0 ? -6 : 1);
                     startWeekDate.setDate(diff);
@@ -279,6 +279,32 @@ const studentStudentService = {
             } catch (error) {
                 reject({
                     message: 'error at getStudySchedule StudentService',
+                    details: error,
+                });
+            }
+        });
+    },
+    getStudyCore: (svId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const resultOfStudy = await db.StudentsOfLophocPhan.findAll({
+                    where: {
+                        svId: svId,
+                    },
+                    attributes: { exclude: ['id', 'svId'] },
+                });
+                if (resultOfStudy.length > 0) {
+                    for (const element of resultOfStudy) {
+                        let nameOfLhp = await getNameOfLhp(element.lhpId);
+                        element.nameOfLhp = nameOfLhp.name;
+                    }
+                    resolve({ errCode: 0, message: 'get study score sucssessfully', data: resultOfStudy });
+                } else {
+                    resolve({ errCode: 1, message: 'you didnt register any lhp ', data: null });
+                }
+            } catch (error) {
+                reject({
+                    message: 'error at getStudyCore StudentService',
                     details: error,
                 });
             }
@@ -362,7 +388,6 @@ const studentStudentService = {
                     message: 'error at registerLhp StudentService',
                     details: error,
                 });
-                return;
             }
         });
     },
