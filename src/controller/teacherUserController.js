@@ -176,6 +176,19 @@ const teacherController = {
             return res.status(500).send('Lỗi Server Nội bộ');
         }
     },
+
+    getExamWatchingSchedule: async (req, res) => {
+        try {
+            let response = await teacherService.getExamWatchingSchedule(req.session.userData.teacherId);
+            return res.render('featured_form/student/exam_schedule.hbs', {
+                userData: req.session.userData,
+                examSchedule: response,
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send('Lỗi Server Nội bộ');
+        }
+    },
 };
 
 module.exports = teacherController;

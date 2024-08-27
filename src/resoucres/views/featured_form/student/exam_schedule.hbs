@@ -1,0 +1,35 @@
+{{#if userData.svId}}
+    <h1 style='text-align: center; padding:20px'>Lịch thi</h1>
+{{else}}
+    <h1 style='text-align: center; padding:20px'>Lịch coi thi</h1>
+
+{{/if}}
+{{#if examSchedule.errCode}}
+    <div style='text-align: center;' class='alert alert-primary' role='alert'>
+        {{examSchedule.message}}
+    </div>{{else}}
+    <table class='table'>
+        <thead>
+            <tr>
+                <th scope='col'>Mã lớp học phần</th>
+                <th scope='col'>Tên Lớp học Phần</th>
+                <th scope='col'>Ngày thi</th>
+                <th scope='col'>Thời gian bắt đầu</th>
+                <th scope='col'>Thời gian kết thúc</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {{#each examSchedule.data}}
+                <tr>
+                    <td>{{this.lhpId}}</td>
+                    <td>{{this.nameOfLhp}}</td>
+                    <td>{{this.date}}</td>
+                    <td>{{this.startTime}}</td>
+                    <td>{{this.endTime}}</td>
+
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+{{/if}}

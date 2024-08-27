@@ -21,6 +21,31 @@ const getDayOfWeekString = (dayNumber) => {
             break;
     }
 };
+const getNameOfLhp = async (lhpId) => {
+    let name = await db.Lophocphans.findOne({
+        where: {
+            lhpId: lhpId,
+        },
+        attributes: ['name'],
+    });
+    return name;
+};
+const getCreatedLhpIdArr = (teacherId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const registedLhpId = await db.Lophocphans.findAll({
+                // những học phần đã đăng kys
+                where: {
+                    teacherId: teacherId,
+                },
+                attributes: ['lhpId'],
+            });
+            resolve(registedLhpId);
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
 let timeTable = [
     { period: 1, startHour: '07', startMinute: '00', endHour: '07', endMinute: '45' },
     { period: 1, startHour: '07', startMinute: '00', endHour: '07', endMinute: '45' },
@@ -41,15 +66,19 @@ let timeTable = [
 const teacherService = {
     createLhp: (data) => {
         return new Promise(async (resolve, reject) => {
+            console.log('check data', data);
             const {
                 name,
                 state,
                 quantityOfstudents,
                 quantityoftinchi,
                 startDateString,
-                timeStart,
+                startTime,
                 slTiet1buoi,
                 daysOffWeek,
+                ExamstartDateString,
+                examStartTime,
+                slTiet1buoiThi,
             } = data;
             if (
                 name &&
@@ -57,9 +86,12 @@ const teacherService = {
                 quantityOfstudents &&
                 quantityoftinchi &&
                 startDateString &&
-                timeStart &&
+                startTime &&
                 slTiet1buoi &&
-                daysOffWeek
+                daysOffWeek &&
+                ExamstartDateString &&
+                examStartTime &&
+                slTiet1buoiThi
             ) {
                 try {
                     const lophocphan = await db.Lophocphans.create({
@@ -71,15 +103,27 @@ const teacherService = {
                     });
                     let quantityOfTiet = Number(quantityoftinchi) * 10;
                     let quantityOfDay = quantityOfTiet / slTiet1buoi;
-                    let endTime = Number(timeStart) + Number(slTiet1buoi);
-                    let startDateArr = startDateString.split('-');
+                    let startDateArr = startDateString.split('-'); // example : startDateString='2024-08-20'
                     let startYear = Number(startDateArr[0]);
-                    let startMonth = Number(startDateArr[1]);
+                    let startMonth = Number(startDateArr[1]); //
                     let startDay = Number(startDateArr[2]);
-                    let numberStart = Number(timeStart);
-
+                    let numberStart = Number(startTime);
+                    let endTime = numberStart + Number(slTiet1buoi);
                     let startDate = new Date(startYear, startMonth, startDay);
 
+                    let examDateArr = ExamstartDateString.split('-'); // example : startDateString='2024-08-20'
+                    // let examYear = Number(examDateArr[0]);
+                    // let examMonth = Number(examDateArr[1]); //
+                    // let examDay = Number(examDateArr[2]);
+                    let examStartNumber = Number(examStartTime);
+                    let examEndTime = examStartNumber + Number(slTiet1buoiThi);
+                    await db.examSchedule.create({
+                        date: ExamstartDateString,
+                        startTime: `${timeTable[examStartNumber].startHour}:${timeTable[examStartNumber].startMinute}`,
+                        quantityOftiet: slTiet1buoiThi,
+                        lhpId: lophocphan.lhpId,
+                        endTime: `${timeTable[examEndTime].endHour}:${timeTable[examEndTime].endMinute}`,
+                    });
                     if (Array.isArray(daysOffWeek)) {
                         let countStudyDay = 0;
                         while (countStudyDay < quantityOfDay) {
@@ -102,10 +146,11 @@ const teacherService = {
                         while (countStudyDay < quantityOfDay) {
                             if (startDate.getDay() === Number(daysOffWeek)) {
                                 await db.StudySchedule.create({
-                                    startTime: `${startDate.getFullYear()}-${startDate.getMonth + 1}-${startDate.getDate()} ${timeTable[numberStart].startHour}:${timeTable[numberStart].startMinute}:00`,
-                                    endTime: `${timeTable[endTime].endHour}:${timeTable[endTime].endMinute}`,
+                                    date: `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+                                    startTime: `${timeTable[numberStart].startHour}:${timeTable[numberStart].startMinute}`,
                                     quantityOftiet: slTiet1buoi,
                                     lhpId: lophocphan.lhpId,
+                                    endTime: `${timeTable[endTime].endHour}:${timeTable[endTime].endMinute}`,
                                 });
                             }
 
@@ -260,7 +305,12 @@ const teacherService = {
                     await db.Lophocphans.destroy({
                         where: { lhpId: lhpId },
                     });
-
+                    await db.StudySchedule.destroy({
+                        where: { lhpId: lhpId },
+                    });
+                    await db.examSchedule.destroy({
+                        where: { lhpId: lhpId },
+                    });
                     resolve({ errCode: 0, message: 'Xóa thành công học phần', data: null });
                 } else {
                     resolve({ errCode: 1, message: 'Không có lhpId', data: null });
@@ -425,6 +475,50 @@ const teacherService = {
             } catch (error) {
                 reject({
                     message: 'error at getTeacherSchedule teacherService',
+                    details: error,
+                });
+            }
+        });
+    },
+    getExamWatchingSchedule: (teacherId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const createdLhpIdArr = await getCreatedLhpIdArr(teacherId);
+                const examScheduleArr = [];
+                for (const element of createdLhpIdArr) {
+                    let examSchedule = await db.examSchedule.findOne({
+                        where: {
+                            lhpId: element.lhpId,
+                        },
+                    });
+                    examScheduleArr.push(examSchedule);
+                }
+                if (examScheduleArr.length > 0) {
+                    for (const element of examScheduleArr) {
+                        let nameOfLhp = await getNameOfLhp(element.lhpId);
+                        element.nameOfLhp = nameOfLhp.name;
+                    }
+                    for (const element of examScheduleArr) {
+                        // convert date that form query from db to obj date in js
+
+                        const date = new Date(element.date);
+
+                        // Lấy ngày, tháng, năm từ đối tượng Date
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+                        const year = date.getFullYear();
+
+                        // Định dạng ngày theo DD-MM-YYYY
+                        const formattedDate = `${day}-${month}-${year}`;
+                        element.date = formattedDate;
+                    }
+                    resolve({ errCode: 0, message: 'get exam watching schedule sucssessfully', data: examScheduleArr });
+                } else {
+                    resolve({ errCode: 1, message: 'you didnt create any lhp ', data: null });
+                }
+            } catch (error) {
+                reject({
+                    message: 'error at getExamWatchingSchedule teacherService',
                     details: error,
                 });
             }

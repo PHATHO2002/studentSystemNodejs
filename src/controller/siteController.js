@@ -1,3 +1,5 @@
+const db = require('../models/index');
+
 const studentService = require('../services/studentService');
 const teacherService = require('../services/teacherService');
 
@@ -32,7 +34,6 @@ const SiteController = {
                 });
             } else {
                 let response = await teacherService.getTeachShedule(req.session.userData.teacherId, dateRequest); //get number of teching this week
-
                 return res.render('dashboard', {
                     userData: userData,
                     today: dateToday,

@@ -9,9 +9,9 @@
 
     </div>
     <div style='display: flex;justify-content: space-between;' class='mb-3'>
-        <div class=''>
+        <div style='width: 30%;' class=''>
 
-            <label for='state' class='form-label'>Trạng thái lớp học phần:</label>
+            <label for='state' class='form-label'>Trạng thái</label>
             <select name='state' style='display: block;' id='state'>
 
                 <option value='1' selected>Mở</option>
@@ -30,44 +30,27 @@
                 required
             />
         </div>
-
-    </div>
-    <div
-        style='display: flex;
-    justify-content: space-between;'
-        class='mb-3'
-    >
         <div class=''>
 
             <label for='quantity' class='form-label'>Số lượng sinh viên:</label>
-            <input
-                name='quantityOfstudents'
-                style='width: 50%;'
-                type='number'
-                class='form-control'
-                id='quantity'
-                required
-            />
+            <input name='quantityOfstudents' type='number' class='form-control' id='quantity' required />
         </div>
-
     </div>
+
     <div
         style='display: flex;
     justify-content: space-between;'
         class='mb-3'
     >
-        <div class=''>
+        <div style='width: 30%;' class=''>
             <label for='startDateString' class='form-label'>Ngày bắt đầu:</label>
 
-            <select name='startDateString' style='display: block;' id='startDateString'>
-                {{! content in js }}
-            </select>
-
+            <input name='startDateString' id='startDateString' type='date' />
         </div>
         <div class=''>
-            <label for='timeStart' class='form-label'>Học từ tiết: </label>
+            <label for='startTime' class='form-label'>Học từ tiết: </label>
 
-            <select name='timeStart' style='display: block;' name='' id='timeStart'>
+            <select name='startTime' style='display: block;' name='' id='startTime'>
                 <option value='1' selected>1 </option>
                 <option value='6'>6</option>
                 <option value='11'>11</option>
@@ -115,6 +98,39 @@
         </div>
 
     </div>
+    <div
+        style='display: flex;
+    justify-content: space-between;'
+        class='mb-3'
+    >
+        <div style='width: 30%;' class=''>
+            <label for='startDateString' class='form-label'>Ngày thi:</label>
+
+            <input name='ExamstartDateString' type='date' />
+        </div>
+        <div class=''>
+            <label for='examStartTime' class='form-label'>thi từ tiết: </label>
+
+            <select name='examStartTime' style='display: block;' name='' id='examStartTime'>
+                <option value='1' selected>1 </option>
+                <option value='6'>6</option>
+                <option value='11'>11</option>
+
+            </select>
+
+        </div>
+        <div class=''>
+            <label for='slTiet1buoi' class='form-label'>thi trong mấy tiết :</label>
+            <select name='slTiet1buoiThi' style='display: block;' name='' id='slTiet1buoi'>
+                <option value='1'>1 </option>
+                <option value='2'>2</option>
+                <option value='3' selected>3 </option>
+                <option value='4'>4</option>
+
+            </select>
+
+        </div>
+
+    </div>
     <button type='submit' class='btn btn-primary'>Tạo</button>
 </form>
-<script src='js/teacher/createLhp.js'> </script>

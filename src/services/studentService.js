@@ -31,6 +31,23 @@ const getDayOfWeekString = (dayNumber) => {
             break;
     }
 };
+const getRegistedLhpIdArr = (svId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const registedLhpId = await db.StudentsOfLophocPhan.findAll({
+                // những học phần đã đăng kys
+                where: {
+                    svId: svId,
+                },
+                attributes: ['lhpId'],
+            });
+            resolve(registedLhpId);
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 const studentStudentService = {
     getListLhp_open: (svId) => {
         return new Promise(async (resolve, reject) => {
@@ -92,13 +109,7 @@ const studentStudentService = {
     getListLhpregisted: (svId) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const registedLhpId = await db.StudentsOfLophocPhan.findAll({
-                    // những học phần đã đăng kys
-                    where: {
-                        svId: svId,
-                    },
-                    attributes: ['lhpId'],
-                });
+                const registedLhpId = await getRegistedLhpIdArr(svId);
                 let registedLhpIdArrValue = [];
                 let registedLhps = [];
                 for (let i = 0; i < registedLhpId.length; i++) {
@@ -279,6 +290,50 @@ const studentStudentService = {
             } catch (error) {
                 reject({
                     message: 'error at getStudySchedule StudentService',
+                    details: error,
+                });
+            }
+        });
+    },
+    getExamSchedule: (svId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const registedLhpIdArr = await getRegistedLhpIdArr(svId);
+                const examScheduleArr = [];
+                for (const element of registedLhpIdArr) {
+                    let examSchedule = await db.examSchedule.findOne({
+                        where: {
+                            lhpId: element.lhpId,
+                        },
+                    });
+                    examScheduleArr.push(examSchedule);
+                }
+                if (examScheduleArr.length > 0) {
+                    for (const element of examScheduleArr) {
+                        let nameOfLhp = await getNameOfLhp(element.lhpId);
+                        element.nameOfLhp = nameOfLhp.name;
+                    }
+                    for (const element of examScheduleArr) {
+                        // convert date that form query from db to obj date in js
+
+                        const date = new Date(element.date);
+
+                        // Lấy ngày, tháng, năm từ đối tượng Date
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+                        const year = date.getFullYear();
+
+                        // Định dạng ngày theo DD-MM-YYYY
+                        const formattedDate = `${day}-${month}-${year}`;
+                        element.date = formattedDate;
+                    }
+                    resolve({ errCode: 0, message: 'get study score sucssessfully', data: examScheduleArr });
+                } else {
+                    resolve({ errCode: 1, message: 'you didnt register any lhp ', data: null });
+                }
+            } catch (error) {
+                reject({
+                    message: 'error at getExamSchedđule StudentService',
                     details: error,
                 });
             }

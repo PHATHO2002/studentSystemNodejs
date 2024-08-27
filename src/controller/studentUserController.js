@@ -85,6 +85,18 @@ const StudenttController = {
             return res.status(500).send('Lỗi Server Nội bộ');
         }
     },
+    getExamSchedule: async (req, res) => {
+        try {
+            let response = await studentService.getExamSchedule(req.session.userData.svId);
+            return res.render('featured_form/student/exam_schedule.hbs', {
+                userData: req.session.userData,
+                examSchedule: response,
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send('Lỗi Server Nội bộ');
+        }
+    },
     getStudyCore: async (req, res) => {
         try {
             let response = await studentService.getStudyCore(req.session.userData.svId);
