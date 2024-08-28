@@ -40,6 +40,12 @@ const teacherController = {
                     lhpData: response,
                     grading: 'ok',
                 });
+            } else if (req.query.edit) {
+                return res.render('featured_form/teacher/list_lhp', {
+                    userData: req.session.userData,
+                    lhpData: response,
+                    edit: 'ok',
+                });
             } else {
                 return res.render('featured_form/teacher/list_lhp', {
                     userData: req.session.userData,
