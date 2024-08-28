@@ -3,6 +3,10 @@
   margin: 0;
   padding: 0; }
 
+body {
+  margin-top: 67px;
+  background-color: #e7ecf0; }
+
 .box-df {
   background-color: #fff;
   min-height: 20px;

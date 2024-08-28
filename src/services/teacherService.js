@@ -66,7 +66,6 @@ let timeTable = [
 const teacherService = {
     createLhp: (data) => {
         return new Promise(async (resolve, reject) => {
-            console.log('check data', data);
             const {
                 name,
                 state,
@@ -94,12 +93,14 @@ const teacherService = {
                 slTiet1buoiThi
             ) {
                 try {
+                    let price = quantityoftinchi * 300000; // 1 tin =300000
                     const lophocphan = await db.Lophocphans.create({
                         name: name,
                         teacherId: data.teacherId,
                         state: Number(state),
                         quantityOfstudents: quantityOfstudents,
                         quantityoftinchi: quantityoftinchi,
+                        tuition: price,
                     });
                     let quantityOfTiet = Number(quantityoftinchi) * 10;
                     let quantityOfDay = quantityOfTiet / slTiet1buoi;
@@ -111,10 +112,6 @@ const teacherService = {
                     let endTime = numberStart + Number(slTiet1buoi);
                     let startDate = new Date(startYear, startMonth, startDay);
 
-                    let examDateArr = ExamstartDateString.split('-'); // example : startDateString='2024-08-20'
-                    // let examYear = Number(examDateArr[0]);
-                    // let examMonth = Number(examDateArr[1]); //
-                    // let examDay = Number(examDateArr[2]);
                     let examStartNumber = Number(examStartTime);
                     let examEndTime = examStartNumber + Number(slTiet1buoiThi);
                     await db.examSchedule.create({

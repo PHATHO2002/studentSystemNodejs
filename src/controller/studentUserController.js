@@ -97,6 +97,30 @@ const StudenttController = {
             return res.status(500).send('Lỗi Server Nội bộ');
         }
     },
+    getTuition: async (req, res) => {
+        try {
+            try {
+                let response = await studentService.getListLhpregisted(req.session.userData.svId);
+                let totalTuition = 0;
+                if (response.data.length > 0) {
+                    response.data.forEach((element) => {
+                        totalTuition += element.tuition;
+                    });
+                }
+                return res.render('featured_form/student/listlhpRegisted.hbs', {
+                    userData: req.session.userData,
+                    listLhpRegister: response,
+                    totalTuition: totalTuition,
+                });
+            } catch (error) {
+                console.log(error);
+                res.status(500).send('Lỗi Server Nội bộ');
+            }
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send('Lỗi Server Nội bộ');
+        }
+    },
     getStudyCore: async (req, res) => {
         try {
             let response = await studentService.getStudyCore(req.session.userData.svId);

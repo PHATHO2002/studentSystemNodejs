@@ -57,7 +57,7 @@ const UserService = {
                         }
                     } catch (err) {
                         if (err.parent.code == 'ER_DUP_ENTRY') {
-                            reject({ errCode: 2, message: `${accountName} đã có người sử dụng!`, data: studentData });
+                            resolve({ errCode: 2, message: `${accountName} đã có người sử dụng!`, data: studentData });
                         } else throw err;
                     }
                 } catch (error) {

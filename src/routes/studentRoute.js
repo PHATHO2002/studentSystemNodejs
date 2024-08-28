@@ -10,7 +10,7 @@ router.get('/getListLhp-registed', isAuthenticated, studentController.getListLhp
 router.get('/get-scheduleOfLhp', isAuthenticated, studentController.getScheduleOfLhp);
 router.get('/get-study-schedule', isAuthenticated, studentController.getWeekStudySchedule);
 router.get('/get-exam-schedule', isAuthenticated, studentController.getExamSchedule);
-
+router.get('/get-tuition', isAuthenticated, studentController.getTuition);
 router.get('/get-study-core', isAuthenticated, studentController.getStudyCore);
 
 module.exports = router;

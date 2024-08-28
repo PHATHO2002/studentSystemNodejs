@@ -1,49 +1,104 @@
-<h1
-    style='text-align: center;text-align: center;
+{{#if totalTuition}}
+    <h1
+        style='text-align: center;text-align: center;
     font-weight: 600;
     padding: 20px; '
->Danh sách lớp học phần đã đăng ký</h1>
+    >Học phí</h1>
 
-{{#if listLhpRegister.errCode}}
+    {{#if listLhpRegister.errCode}}
 
-    <div style='text-align: center;' class='alert alert-primary' role='alert'>
-        {{listLhpRegister.message}}
-    </div>
-{{else}}
-    <table class='table table-success table-striped' style='width: 900px; margin:auto'>
-        <thead>
-            <tr>
-                <th>Tên lớp học phần</th>
-                <th>Trạng thái</th>
-                <th>số lượng tín chỉ</th>
-
-                <th>Action</th>
-
-            </tr>
-        </thead>
-        <tbody>
-
-            {{#each listLhpRegister.data}}
+        <div style='text-align: center;' class='alert alert-primary' role='alert'>
+            {{listLhpRegister.message}}
+        </div>
+    {{else}}
+        <table class='table table-success table-striped' style='width: 900px; margin:auto'>
+            <thead>
                 <tr>
-                    <td>{{this.name}}</td>
-                    <td>{{#if this.state}}
-                            Mở
-                        {{else}}
-                            Đóng
-                        {{/if}}</td>
-                    <td>{{this.quantityoftinchi}}</td>
+                    <th>Tên lớp học phần</th>
+                    <th>Trạng thái</th>
+                    <th>số lượng tín chỉ</th>
+                    <th>Học phí</th>
 
-                    <td>
-                        <a href='/student/remove-registedLhp?lhpId={{this.lhpId}}&state={{this.state}}'>
-                            <button type='button' class='btn btn-secondary'>
-                                Hủy
-                            </button>
-                        </a>
-
-                    </td>
                 </tr>
-            {{/each}}
+            </thead>
+            <tbody>
 
-        </tbody>
-    </table>
+                {{#each listLhpRegister.data}}
+                    <tr>
+                        <td>{{this.name}}</td>
+                        <td>{{#if this.state}}
+                                Mở
+                            {{else}}
+                                Đóng
+                            {{/if}}</td>
+                        <td>{{this.quantityoftinchi}}</td>
+
+                        <td>
+                            {{this.tuition}}
+                            VNĐ
+
+                        </td>
+                    </tr>
+                {{/each}}
+                <tr>
+                    <td>Tổng cộng :</td>
+                    <td></td>
+                    <td></td>
+                    <td>{{totalTuition}} VNĐ</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    {{/if}}
+{{else}}
+    <h1
+        style='text-align: center;text-align: center;
+    font-weight: 600;
+    padding: 20px; '
+    >Danh sách lớp học phần đã đăng ký</h1>
+
+    {{#if listLhpRegister.errCode}}
+
+        <div style='text-align: center;' class='alert alert-primary' role='alert'>
+            {{listLhpRegister.message}}
+        </div>
+    {{else}}
+        <table class='table table-success table-striped' style='width: 900px; margin:auto'>
+            <thead>
+                <tr>
+                    <th>Tên lớp học phần</th>
+                    <th>Trạng thái</th>
+                    <th>số lượng tín chỉ</th>
+
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                {{#each listLhpRegister.data}}
+                    <tr>
+                        <td>{{this.name}}</td>
+                        <td>{{#if this.state}}
+                                Mở
+                            {{else}}
+                                Đóng
+                            {{/if}}</td>
+                        <td>{{this.quantityoftinchi}}</td>
+
+                        <td>
+                            <a href='/student/remove-registedLhp?lhpId={{this.lhpId}}&state={{this.state}}'>
+                                <button type='button' class='btn btn-secondary'>
+                                    Hủy
+                                </button>
+                            </a>
+
+                        </td>
+                    </tr>
+                {{/each}}
+
+            </tbody>
+        </table>
+    {{/if}}
 {{/if}}
