@@ -1,17 +1,18 @@
 const express = require('express');
 const teacherController = require('../controller/teacherUserController');
 const isAuthenticated = require('../middleware/isAuthenticated');
+const isTeacher = require('../middleware/isTeacher');
 const router = express.Router();
-router.get('/create-lophocphan-form', isAuthenticated, teacherController.getCreateLhpForm);
-router.get('/list_lhp', isAuthenticated, teacherController.getListLhp);
-router.get('/get-edit-lhp-form', isAuthenticated, teacherController.getEditLhpForm);
-router.get('/get-student-lhp-list', isAuthenticated, teacherController.getStudentListOfLhp);
-router.get('/get-exam-watching-schedule', isAuthenticated, teacherController.getExamWatchingSchedule);
+router.get('/create-lophocphan-form', isAuthenticated, isTeacher, teacherController.getCreateLhpForm);
+router.get('/list_lhp', isAuthenticated, isTeacher, teacherController.getListLhp);
+router.get('/get-edit-lhp-form', isAuthenticated, isTeacher, teacherController.getEditLhpForm);
+router.get('/get-student-lhp-list', isAuthenticated, isTeacher, teacherController.getStudentListOfLhp);
+router.get('/get-exam-watching-schedule', isAuthenticated, isTeacher, teacherController.getExamWatchingSchedule);
 
-router.post('/create_lhp', isAuthenticated, teacherController.createlhp);
-router.post('/update_lhp', isAuthenticated, teacherController.updateLhp);
-router.post('/grading', isAuthenticated, teacherController.grading);
-router.get('/remove_lhp', isAuthenticated, teacherController.removeLhp);
-router.get('/get-week-teach-schedule', isAuthenticated, teacherController.getWeekTeachingSchedule);
+router.post('/create_lhp', isAuthenticated, isTeacher, teacherController.createlhp);
+router.post('/update_lhp', isAuthenticated, isTeacher, teacherController.updateLhp);
+router.post('/grading', isAuthenticated, isTeacher, teacherController.grading);
+router.get('/remove_lhp', isAuthenticated, isTeacher, teacherController.removeLhp);
+router.get('/get-week-teach-schedule', isAuthenticated, isTeacher, teacherController.getWeekTeachingSchedule);
 
 module.exports = router;
