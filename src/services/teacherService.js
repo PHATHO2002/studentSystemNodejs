@@ -127,7 +127,7 @@ const teacherService = {
                             for (const element of daysOffWeek) {
                                 if (startDate.getDay() === Number(element)) {
                                     await db.StudySchedule.create({
-                                        date: `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+                                        date: `${startDate.getFullYear()}-${startDate.getMonth().toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
                                         startTime: `${timeTable[numberStart].startHour}:${timeTable[numberStart].startMinute}`,
                                         quantityOftiet: slTiet1buoi,
                                         lhpId: lophocphan.lhpId,
@@ -143,7 +143,7 @@ const teacherService = {
                         while (countStudyDay < quantityOfDay) {
                             if (startDate.getDay() === Number(daysOffWeek)) {
                                 await db.StudySchedule.create({
-                                    date: `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
+                                    date: `${startDate.getFullYear()}-${startDate.getMonth().toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`,
                                     startTime: `${timeTable[numberStart].startHour}:${timeTable[numberStart].startMinute}`,
                                     quantityOftiet: slTiet1buoi,
                                     lhpId: lophocphan.lhpId,
