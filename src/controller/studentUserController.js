@@ -102,10 +102,12 @@ const StudenttController = {
             try {
                 let response = await studentService.getListLhpregisted(req.session.userData.svId);
                 let totalTuition = 0;
-                if (response.data.length > 0) {
-                    response.data.forEach((element) => {
-                        totalTuition += element.tuition;
-                    });
+                if (response.data) {
+                    if (response.data.length > 0) {
+                        response.data.forEach((element) => {
+                            totalTuition += element.tuition;
+                        });
+                    }
                 }
                 return res.render('featured_form/student/listlhpRegisted.hbs', {
                     userData: req.session.userData,

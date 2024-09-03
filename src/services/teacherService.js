@@ -352,6 +352,7 @@ const teacherService = {
                             {
                                 where: {
                                     svId: data.svId,
+                                    lhpId: data.lhpId,
                                 },
                             },
                         );
