@@ -128,7 +128,7 @@ const teacherController = {
             res.send(`
             <script>
                 alert('${response.message}');
-                window.location.href = '/teacher/list_lhp';
+                window.location.href = '/teacher/list_lhp?edit=1';
             </script>
         `);
         } catch (error) {
